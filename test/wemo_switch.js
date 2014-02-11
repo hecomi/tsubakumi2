@@ -2,7 +2,7 @@ var WeMo       = require('wemo');
 var should     = require('should');
 var async      = require('async');
 var Settings   = require('../settings');
-var wemoSwitch = new WeMo(Settings.WeMo.Switch.ip);
+var wemoSwitch = new WeMo(Settings.WeMo.switches.monitor.ip);
 
 var WeMoError = function(err) {
 	var e = new Error(err);

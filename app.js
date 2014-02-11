@@ -19,7 +19,14 @@ app.use(require('./middlewares/errorHandler.js'));
 // APIs
 // --------------------------------------------------------------------------------
 var routes = require('./routes')(app);
-app.get('/iremocon/:api', routes.iremocon);
+
+// iRemocon
+app.get('/iremocon/:api([a-z]+)',             routes.iremocon);
+app.get('/iremocon/:api([a-z]+)/:no([0-9]+)', routes.iremocon);
+
+// WeMo
+app.get('/wemo/switch/:target/:api', routes.wemo.switches);
+app.get('/wemo/motion/:target/:api', routes.wemo.motions);
 
 // Start Server
 // --------------------------------------------------------------------------------

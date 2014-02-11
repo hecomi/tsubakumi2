@@ -1,4 +1,12 @@
 module.exports = {
+	DB: {
+		host        : 'localhost',
+		port        : 27017,
+		dbName      : 'tsubakumi',
+		collections : {
+			ir: 'ir'
+		}
+	},
 	iRemocon: {
 		ip: '192.168.1.113',
 		test: {
@@ -7,11 +15,13 @@ module.exports = {
 		}
 	},
 	WeMo: {
-		Switch: {
-			ip: '192.168.1.107'
+		// モニタのスイッチ
+		switches : {
+			monitor: { ip: '192.168.1.107' }
 		},
-		Motion: {
-			ip: '192.168.1.108'
+		// 玄関
+		motions : {
+			entrance: { ip: '192.168.1.108' }
 		}
 	}
 };
