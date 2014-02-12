@@ -3,20 +3,35 @@ var irMap    = require('../../ir-map');
 var iRemocon = require('iremocon');
 var readline = require('readline');
 var printf   = require('printf');
+var opts     = require('opts');
 
-// iRemocon
 var ir = new iRemocon(settings.ip);
-
-// Readline interface
 var rl = readline.createInterface({
-	input: process.stdin,
-	output: process.stdout
+	input  : process.stdin,
+	output : process.stdout
 });
-rl.setPrompt('iRemocon> ');
+
+// Parse command-line options
+opts.parse([
+	{
+		short: 'f',
+		long: 'from',
+		description: 'learn from this index',
+		value: true
+	},
+	{
+		short: 't',
+		long: 'to',
+		description: 'learn to this index',
+		value: true
+	}
+], true);
+var from = opts.get('from') || 0;
+var to   = opts.get('to')   || irMap.length - 1;
 
 // Learn IR Map
 var learn = function(id) {
-	if (id < 0 || id > irMap.length - 1) {
+	if (id < from || id > to) {
 		console.log('Done!');
 		process.exit();
 	}
@@ -39,4 +54,4 @@ var learn = function(id) {
 		}
 	});
 };
-learn(0);
+learn(from);
