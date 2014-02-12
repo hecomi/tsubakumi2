@@ -21,8 +21,9 @@ module.exports = function(app) {
 				throw new InvalidArgumentsError(target + ' is not registered as WeMo Switch device');
 			}
 
-			var ip = settings.WeMo.switches[target].ip;
-			var wemo = new WeMo(ip);
+			var ip   = settings.WeMo.switches[target].ip;
+			var port = settings.WeMo.switches[target].port;
+			var wemo = new WeMo(ip, port);
 
 			switch (req.params.api) {
 				case 'state':
@@ -54,8 +55,9 @@ module.exports = function(app) {
 				throw new InvalidArgumentsError(target + ' is not registered as WeMo Switch device');
 			}
 
-			var ip = settings.WeMo.motions[target].ip;
-			var wemo = new WeMo(ip);
+			var ip   = settings.WeMo.switches[target].ip;
+			var port = settings.WeMo.switches[target].port;
+			var wemo = new WeMo(ip, port);
 
 			switch (req.params.api) {
 				case 'state':

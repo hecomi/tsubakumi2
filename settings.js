@@ -17,11 +17,17 @@ module.exports = {
 	WeMo: {
 		// モニタのスイッチ
 		switches : {
-			monitor: { ip: '192.168.1.107' }
+			monitor: {
+				ip: '192.168.1.107',
+				port: 49153
+			}
 		},
 		// 玄関
 		motions : {
-			entrance: { ip: '192.168.1.108' }
+			entrance: {
+				ip: '192.168.1.108',
+				port: 49154
+			}
 		}
 	}
 };
