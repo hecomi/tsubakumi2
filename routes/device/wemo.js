@@ -1,5 +1,4 @@
 var WeMo = require('wemo');
-var Settings = require('../settings');
 
 var InvalidArgumentsError = function(msg) {
 	var e = new Error(msg);
@@ -14,14 +13,15 @@ var InvalidApiError = function(msg) {
 };
 
 module.exports = function(app) {
+	var settings = app.get('settings');
 	return {
 		switches: function(req, res) {
 			var target = req.params.target;
-			if (!(target in Settings.WeMo.switches)) {
+			if (!(target in settings.WeMo.switches)) {
 				throw new InvalidArgumentsError(target + ' is not registered as WeMo Switch device');
 			}
 
-			var ip = Settings.WeMo.switches[target].ip;
+			var ip = settings.WeMo.switches[target].ip;
 			var wemo = new WeMo(ip);
 
 			switch (req.params.api) {
@@ -47,13 +47,14 @@ module.exports = function(app) {
 					throw InvalidApiError('"' + req.params.api + '" is not WeMo API');
 			}
 		},
+
 		motions: function(req, res) {
 			var target = req.params.target;
-			if (!(target in Settings.WeMo.motions)) {
+			if (!(target in settings.WeMo.motions)) {
 				throw new InvalidArgumentsError(target + ' is not registered as WeMo Switch device');
 			}
 
-			var ip = Settings.WeMo.motions[target].ip;
+			var ip = settings.WeMo.motions[target].ip;
 			var wemo = new WeMo(ip);
 
 			switch (req.params.api) {

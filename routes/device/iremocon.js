@@ -1,9 +1,14 @@
 var iRemocon = require('iRemocon');
-var Settings = require('../settings');
 
 var InvalidArgumentsError = function(msg) {
 	var e = new Error(msg);
 	e.name = 'InvalidArgumentsError';
+	return e;
+};
+
+var InvalidApiError = function(msg) {
+	var e = new Error(msg);
+	e.name = 'InvalidApiError';
 	return e;
 };
 
@@ -15,7 +20,7 @@ var iRemoconError = function(err) {
 
 module.exports = function(app) {
 	return function(req, res) {
-		var ir = new iRemocon(Settings.iRemocon.ip);
+		var ir = new iRemocon(app.get('settings').iRemocon.ip);
 		switch (req.params.api) {
 			case 'ip':
 				res.jsonp({ msg: ir.getIP() });
@@ -28,7 +33,7 @@ module.exports = function(app) {
 				break;
 			case 'is':
 				if (req.params.no === undefined) {
-					throw InvalidArgumentsError('iRemocon::is argument is undefined');
+					throw InvalidArgumentsError('argument is undefined');
 				}
 				ir.is(req.params.no, function(err, result) {
 					if (err) throw iRemoconError(err);
@@ -37,7 +42,7 @@ module.exports = function(app) {
 				break;
 			case 'ic':
 				if (req.params.no === undefined) {
-					throw InvalidArgumentsError('iRemocon::ic argument is undefined');
+					throw InvalidArgumentsError('argument is undefined');
 				}
 				ir.ic(req.params.no, function(err, result) {
 					if (err) throw iRemoconError(err);
@@ -51,6 +56,8 @@ module.exports = function(app) {
 					res.jsonp({ msg: result });
 				});
 				break;
+			default:
+				throw InvalidApiError('"' + req.params.api + '" is not iRemocon\'s API');
 		}
 	};
 };

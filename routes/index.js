@@ -1,9 +1,10 @@
 module.exports = function(app) {
 	return {
-		iremocon : require('./iremocon.js')(app),
-		wemo     : require('./wemo.js')(app),
+		device : require('./device')(app),
+		place  : require('./place')(app),
 		notfound : function(req, res) {
-			throw new Error(req.url + ' is invalid');
+			res.status(404);
+			throw new Error(req.url + ' is not found.');
 		}
 	};
 };
