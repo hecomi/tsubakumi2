@@ -1,34 +1,61 @@
-module.exports = [
-	{
-		id: 1,
-		name: 'light high'
-	},
-	{
-		id: 2,
-		name: 'light medium-high'
-	},
-	{
-		id: 3,
-		name: 'light medium-low'
-	},
-	{
-		id: 4,
-		name: 'light low'
-	},
-	{
-		id: 5,
-		name: 'light midget'
-	},
-	{
-		id: 6,
-		name: 'light off'
-	},
-	{
-		id: 7,
-		name: 'monitor off'
-	},
-	{
-		id: 8,
-		name: 'monitor on'
-	}
-];
+module.exports = {
+	1  : 'light high',
+	2  : 'light medium-high',
+	3  : 'light medium-low',
+	4  : 'light low',
+	5  : 'light midget',
+	6  : 'light off',
+	7  : 'monitor off',
+	8  : 'monitor on',
+	9  : 'projector on',
+	11 : 'projector off',
+	12 : 'projector left',
+	13 : 'projector up',
+	14 : 'projector right',
+	15 : 'projector bottom',
+	16 : 'projector enter',
+	17 : 'projector click',
+	18 : 'projector exit',
+	19 : 'projector menu',
+	20 : 'projector mute',
+	21 : 'projector source',
+	22 : 'projector page up',
+	23 : 'projector page down',
+	24 : 'projector volume up',
+	25 : 'projector volume down',
+	26 : 'projector page down',
+	27 : 'apple tv left',
+	28 : 'apple tv up',
+	29 : 'apple tv right',
+	30 : 'apple tv down',
+	31 : 'apple tv enter',
+	32 : 'apple tv menu',
+	33 : 'apple tv play/pause',
+	34 : 'ps3 home',
+	35 : 'ps3 scan',
+	36 : 'ps3 top menu',
+	37 : 'ps3 prev',
+	38 : 'ps3 play',
+	39 : 'ps3 pause',
+	40 : 'ps3 next',
+	41 : 'ps3 △',
+	42 : 'ps3 ○',
+	43 : 'ps3 □',
+	44 : 'ps3 ×',
+	45 : 'ps3 left',
+	46 : 'ps3 up',
+	47 : 'ps3 right',
+	48 : 'ps3 down',
+	49 : 'ps3 enter',
+	50 : 'ps3 L1',
+	51 : 'ps3 L2',
+	52 : 'ps3 L3',
+	53 : 'ps3 R1',
+	54 : 'ps3 R2',
+	55 : 'ps3 R3',
+	56 : 'ps3 select',
+	57 : 'ps3 start',
+	58 : 'ps3 display',
+	59 : 'aircon on',
+	60 : 'aircon off'
+};

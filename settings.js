@@ -19,7 +19,7 @@ module.exports = {
 		switches : {
 			monitor: {
 				ip: '192.168.1.107',
-				port: 49153
+				port: 49154
 			}
 		},
 		// 玄関

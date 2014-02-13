@@ -4,6 +4,7 @@ var iRemocon = require('iremocon');
 var readline = require('readline');
 var printf   = require('printf');
 var opts     = require('opts');
+var _        = require('underscore');
 
 var ir = new iRemocon(settings.ip);
 var rl = readline.createInterface({
@@ -26,8 +27,19 @@ opts.parse([
 		value: true
 	}
 ], true);
-var from = opts.get('from') || 0;
-var to   = opts.get('to')   || irMap.length - 1;
+var sortedKeys = _.chain(irMap).keys().sortBy(function(key) {
+	return parseInt(key);
+});
+var min  = parseInt(sortedKeys.first().value());
+var max  = parseInt(sortedKeys.last().value());
+var from = parseInt(opts.get('from')) || min;
+var to   = parseInt(opts.get('to'))   || max;
+if (from < min || to > max || to < from) {
+	console.error('from ~ to must be %d ~ %d', min, max);
+	process.exit();
+}
+
+console.log(to);
 
 // Learn IR Map
 var learn = function(id) {
@@ -35,11 +47,14 @@ var learn = function(id) {
 		console.log('Done!');
 		process.exit();
 	}
-	var signal = irMap[id];
-	rl.question(printf('Learn "%s" [Y/n]', signal.name), function(answer) {
+	if (irMap[id] === undefined && id < to) {
+		learn(++id);
+		return;
+	}
+	rl.question(printf('Learn "%s" [Y/n]', irMap[id]), function(answer) {
 		switch (answer) {
 			case '': case 'y': case 'Y':
-				ir.ic(signal.id, function(err, result) {
+				ir.ic(id, function(err, result) {
 					if (err) console.error(err.code, err.error);
 					console.log(result);
 					learn(++id);
