@@ -6,11 +6,21 @@ var printf   = require('printf');
 var opts     = require('opts');
 var _        = require('underscore');
 
+
 var ir = new iRemocon(settings.ip);
 var rl = readline.createInterface({
 	input  : process.stdin,
 	output : process.stdout
 });
+
+
+// ir map
+var sortedKeys = _.chain(irMap).keys().sortBy(function(key) {
+	return parseInt(key);
+});
+var min = parseInt(sortedKeys.first().value());
+var max = parseInt(sortedKeys.last().value());
+
 
 // Parse command-line options
 opts.parse([
@@ -27,11 +37,6 @@ opts.parse([
 		value: true
 	}
 ], true);
-var sortedKeys = _.chain(irMap).keys().sortBy(function(key) {
-	return parseInt(key);
-});
-var min  = parseInt(sortedKeys.first().value());
-var max  = parseInt(sortedKeys.last().value());
 var from = parseInt(opts.get('from')) || min;
 var to   = parseInt(opts.get('to'))   || max;
 if (from < min || to > max || to < from) {
@@ -39,7 +44,6 @@ if (from < min || to > max || to < from) {
 	process.exit();
 }
 
-console.log(to);
 
 // Learn IR Map
 var learn = function(id) {
@@ -51,11 +55,15 @@ var learn = function(id) {
 		learn(++id);
 		return;
 	}
-	rl.question(printf('Learn "%s" [Y/n]', irMap[id]), function(answer) {
+	rl.question(printf('Learn [%d] %s [Y/n]', id, irMap[id]), function(answer) {
 		switch (answer) {
 			case '': case 'y': case 'Y':
 				ir.ic(id, function(err, result) {
-					if (err) console.error(err.code, err.error);
+					if (err) {
+						console.error(err.code, err.error);
+						learn(id);
+						return;
+					}
 					console.log(result);
 					learn(++id);
 				});
