@@ -72,7 +72,7 @@ module.exports = function(app) {
 				});
 				break;
 			default:
-				throw InvalidApiError('"' + req.params.api + '" is not iRemocon\'s API');
+				throw InvalidApiError('"' + req.params.api + '" is not iRemocon API');
 		}
 	};
 };

@@ -19,7 +19,7 @@ app.use(express.bodyParser());
 app.use(app.router);
 app.use(require('./middlewares/errorHandler.js'));
 
-// Low Level APIs
+// Device APIs
 // --------------------------------------------------------------------------------
 var routes = require('./routes')(app);
 
@@ -31,11 +31,16 @@ app.get('/device/iremocon/:api/:no([0-9]+)', routes.device.iremocon);
 app.get('/device/wemo/switch/:target/:api', routes.device.wemo.switches);
 app.get('/device/wemo/motion/:target/:api', routes.device.wemo.motions);
 
+// hue
+app.get('/device/hue/:api', routes.device.hue);
+app.get('/device/hue/:api/:arg1', routes.device.hue);
+app.get('/device/hue/:api/:arg1/:arg2', routes.device.hue);
+app.get('/device/hue/:api/:arg1/:arg2/:arg3', routes.device.hue);
+
 // High Level APIs
 // --------------------------------------------------------------------------------
 // Light
 app.get('/place/room/light/:api', routes.place.room.light);
-app.get('/place/room/light/:api/:arg', routes.place.room.light);
 
 // Errors
 // --------------------------------------------------------------------------------
