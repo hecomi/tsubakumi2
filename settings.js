@@ -1,3 +1,5 @@
+var secret = require('./settings.secret');
+
 module.exports = {
 	port: process.env.PORT || 23456,
 	DB: {
@@ -33,7 +35,8 @@ module.exports = {
 		}
 	},
 	hue: {
-		id: '001788fffe15ccd4',
-		ip: '192.168.0.8'
+		id   : '001788fffe15ccd4',
+		ip   : '192.168.0.8',
+		user : secret.hue.user
 	}
 };
