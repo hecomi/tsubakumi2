@@ -88,5 +88,11 @@ module.exports = {
 	87 : 'aircon degree 27',
 	88 : 'aircon degree 28',
 	89 : 'aircon degree 29',
-	90 : 'aircon degree 30'
+	90 : 'aircon degree 30',
+	91 : 'projector hdmi prev',
+	92 : 'projector hdmi next',
+	93 : 'projector hdmi 1',
+	94 : 'projector hdmi 2',
+	95 : 'projector hdmi 3',
+	96 : 'projector hdmi 4'
 };

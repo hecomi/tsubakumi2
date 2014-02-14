@@ -20,8 +20,11 @@ var iRemoconError = function(err) {
 
 module.exports = function(app) {
 	return function(req, res) {
-		var ir = new iRemocon(app.get('settings').iRemocon.ip);
+		var ir = new iRemocon(app.get('iRemocon').ip);
 		switch (req.params.api) {
+			case 'list':
+				res.jsonp(app.get('iRemocon').irMap);
+				break;
 			case 'ip':
 				res.jsonp({ msg: ir.getIP() });
 				break;
@@ -37,7 +40,11 @@ module.exports = function(app) {
 				}
 				ir.is(req.params.no, function(err, result) {
 					if (err) throw iRemoconError(err);
-					res.jsonp({ msg: result });
+					res.jsonp({
+						ir   : req.params.no,
+						name : app.get('iRemocon').irMap[req.params.no],
+						msg  : result
+					});
 				});
 				break;
 			case 'ic':
@@ -47,13 +54,21 @@ module.exports = function(app) {
 				ir.ic(req.params.no, function(err, result) {
 					if (err) throw iRemoconError(err);
 					console.log(result);
-					res.jsonp({ msg: result });
+					res.jsonp({
+						ir   : req.params.no,
+						name : app.get('iRemocon').irMap[req.params.no],
+						msg  : result
+					});
 				});
 				break;
 			case 'cc':
 				ir.cc(function(err, result) {
 					if (err) throw iRemoconError(err);
-					res.jsonp({ msg: result });
+					res.jsonp({
+						ir   : req.params.no,
+						name : app.get('iRemocon').irMap[req.params.no],
+						msg  : result
+					});
 				});
 				break;
 			default:

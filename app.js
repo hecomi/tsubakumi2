@@ -6,8 +6,9 @@ var settings = require('./settings');
 // Settings
 // --------------------------------------------------------------------------------
 app.enable('jsonp callback');
-app.set('port', process.env.PORT || 23456);
-app.set('settings', settings);
+for (var key in settings) {
+	app.set(key, settings[key]);
+}
 
 // Middlewares
 // --------------------------------------------------------------------------------
@@ -43,4 +44,6 @@ app.get('*', routes.notfound);
 // Start Server
 // --------------------------------------------------------------------------------
 app.listen(app.get('port'));
+var settings = require('./settings');
 console.log('PORT:', app.get('port'));
+
