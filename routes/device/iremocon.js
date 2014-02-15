@@ -42,7 +42,7 @@ module.exports = function(app) {
 				var namedMap = {};
 				_.chain(app.get('iRemocon').irMap).invert().keys().each(function(keys) {
 					keys.split(',').forEach(function(key) {
-						namedMap[key.replace(' ', '/')] = _.invert(app.get('iRemocon').irMap)[keys];
+						namedMap[key.replace(/\s/g, '/')] = _.invert(app.get('iRemocon').irMap)[keys];
 					});
 				});
 				var no = req.params.no || namedMap[req.params[0]];

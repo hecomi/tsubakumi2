@@ -2,6 +2,7 @@ var express  = require('express');
 var app      = express();
 var fs       = require('fs');
 var settings = require('./settings');
+var ip       = require('ip');
 
 // Settings
 // --------------------------------------------------------------------------------
@@ -9,6 +10,7 @@ app.enable('jsonp callback');
 for (var key in settings) {
 	app.set(key, settings[key]);
 }
+app.set('address', ip.address() + ':' + app.get('port'));
 
 // Middlewares
 // --------------------------------------------------------------------------------
@@ -38,14 +40,16 @@ app.get('/device/hue/:api/:arg1', routes.device.hue);
 app.get('/device/hue/:api/:arg1/:arg2', routes.device.hue);
 app.get('/device/hue/:api/:arg1/:arg2/:arg3', routes.device.hue);
 
-// High Level APIs
+// Macro APIs
 // --------------------------------------------------------------------------------
-// Light
-app.get('/place/room/light/:api', routes.place.room.light);
 
 // Errors
 // --------------------------------------------------------------------------------
-app.get('*', routes.notfound);
+app.get('404', routes.notfound);
+
+// Redirect
+// --------------------------------------------------------------------------------
+app.get('*', routes.redirect);
 
 // Start Server
 // --------------------------------------------------------------------------------
