@@ -84,26 +84,26 @@ TOOLs
 -----
 各種ガジェットの設定に必要なスクリプトが ```tool``` 以下に入っています。
 
-* ```/iremocon/search.js```
+* **/iremocon/search.js**
 	* iRemocon の発見に使います。au コマンドを利用しています。
 	* 使用例: ```$ node ./tool/iremocon/search.js '192.168.1.'```
 
-* ```/iremocon/learn.js```
+* **/iremocon/learn.js**
 	* ```./ir-map.js``` に記述された情報を元に赤外線リモコンの対話的学習を行います。
 	* 使用例: ```$ node ./tool/iremocon/learn.js -f 50 -t 60```
 
-* ```/iremocon/stop_learning.js```
+* **/iremocon/stop_learning.js**
 	* 学習中止の cc コマンドを発行します。
 
-* ```/wemo/search.js```
+* **/wemo/search.js**
 	* WeMo の発見に使います。SSDP で探します。
 	* 使用例: ```$ node ./tool/wemo/search.js```
 
-* ```/hue/search.js```
+* **/hue/search.js**
 	* hue の発見に使います。
 	* 使用例: ```$ node ./tool/hue/search.js```
 
-* ```/hue/register.js```
+* **/hue/register.js**
 	* hue へユーザー ID の発行を依頼します。
 	* 使用例: ```$ node ./tool/hue/search.js```
 
