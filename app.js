@@ -26,6 +26,7 @@ var routes = require('./routes')(app);
 // iRemocon
 app.get('/device/iremocon/:api', routes.device.iremocon);
 app.get('/device/iremocon/:api/:no([0-9]+)', routes.device.iremocon);
+app.get('/device/iremocon/:api/*', routes.device.iremocon);
 
 // WeMo
 app.get('/device/wemo/switch/:target/:api', routes.device.wemo.switches);

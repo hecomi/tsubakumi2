@@ -1,4 +1,5 @@
 var iRemocon = require('iRemocon');
+var _ = require('underscore');
 
 var InvalidArgumentsError = function(msg) {
 	var e = new Error(msg);
@@ -35,10 +36,17 @@ module.exports = function(app) {
 				});
 				break;
 			case 'is':
-				if (req.params.no === undefined) {
+				if (!req.params.no && !req.params[0]) {
 					throw InvalidArgumentsError('argument is undefined');
 				}
-				ir.is(req.params.no, function(err, result) {
+				var namedMap = {};
+				_.chain(app.get('iRemocon').irMap).invert().keys().each(function(keys) {
+					keys.split(',').forEach(function(key) {
+						namedMap[key.replace(' ', '/')] = _.invert(app.get('iRemocon').irMap)[keys];
+					});
+				});
+				var no = req.params.no || namedMap[req.params[0]];
+				ir.is(no, function(err, result) {
 					if (err) throw iRemoconError(err);
 					res.jsonp({
 						ir   : req.params.no,
@@ -48,10 +56,10 @@ module.exports = function(app) {
 				});
 				break;
 			case 'ic':
-				if (req.params.no === undefined) {
+				if (!req.params.no && !req.params.name) {
 					throw InvalidArgumentsError('argument is undefined');
 				}
-				ir.ic(req.params.no, function(err, result) {
+				ir.ic(no, function(err, result) {
 					if (err) throw iRemoconError(err);
 					console.log(result);
 					res.jsonp({

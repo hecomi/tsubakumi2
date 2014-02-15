@@ -1,5 +1,5 @@
 module.exports = {
-	1  : 'light high',
+	1  : ['light high', 'light on'],
 	2  : 'light medium-high',
 	3  : 'light medium-low',
 	4  : 'light low',
@@ -7,7 +7,7 @@ module.exports = {
 	6  : 'light off',
 	7  : 'monitor off',
 	8  : 'monitor on',
-	9  : 'projector on/off',
+	9  : ['projector on', 'projector off'],
 	10 : 'projector left',
 	11 : 'projector up',
 	12 : 'projector right',

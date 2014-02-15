@@ -29,8 +29,8 @@ module.exports = {
 		// 玄関
 		motions : {
 			entrance: {
-				ip: '192.168.0.8',
-				port: 49153
+				ip: '192.168.0.14',
+				port: 49154
 			}
 		}
 	},

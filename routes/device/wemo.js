@@ -13,16 +13,15 @@ var InvalidApiError = function(msg) {
 };
 
 module.exports = function(app) {
-	var settings = app.get('settings');
 	return {
 		switches: function(req, res) {
 			var target = req.params.target;
-			if (!(target in settings.WeMo.switches)) {
+			if (!(target in app.get('WeMo').switches)) {
 				throw new InvalidArgumentsError(target + ' is not registered as WeMo Switch device');
 			}
 
-			var ip   = settings.WeMo.switches[target].ip;
-			var port = settings.WeMo.switches[target].port;
+			var ip   = app.get('WeMo').switches[target].ip;
+			var port = app.get('WeMo').switches[target].port;
 			var wemo = new WeMo(ip, port);
 
 			switch (req.params.api) {
@@ -51,12 +50,12 @@ module.exports = function(app) {
 
 		motions: function(req, res) {
 			var target = req.params.target;
-			if (!(target in settings.WeMo.motions)) {
+			if (!(target in app.get('WeMo').motions)) {
 				throw new InvalidArgumentsError(target + ' is not registered as WeMo Switch device');
 			}
 
-			var ip   = settings.WeMo.switches[target].ip;
-			var port = settings.WeMo.switches[target].port;
+			var ip   = app.get('WeMo').motions[target].ip;
+			var port = app.get('WeMo').motions[target].port;
 			var wemo = new WeMo(ip, port);
 
 			switch (req.params.api) {
