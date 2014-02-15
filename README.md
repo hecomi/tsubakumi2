@@ -53,10 +53,31 @@ Device APIs
 	* TODO
 		* 機器番号は機器名でも可能にする
 
+Alias APIs
+----------
+**Device API** を単純に組み合わせたり、ユーザフレンドリーにリネームした API です。
+```./redirect-map.js``` に記載した通りにルーティングを行います。
+
+```javascript
+module.exports = {
+	...
+	'/entrance/light/on'  : '/device/hue/on/1',
+	'/kitchen/light/on'   : ['/device/hue/on/2', '/device/hue/on/3'],
+	'/room/light/on'      : '/light/on',
+	'/all/light/on'       : ['/entrance/light/on', '/kitchen/light/on', '/room/light/on'],
+	...
+};
+```
+
+ここでは、```/device/hue/on/1``` を ```/entrance/light/on``` という名前に書き換えたり、これらを組み合わせて同時に実行する API を定義しています。
+
+* 使用例
+	* http://192.168.0.10:23456/entrance/light/on
+	* http://192.168.0.10:23456/all/light/on
+
 Macro APIs
 ----------
-**Device API** を組み合わせたり、ユーザフレンドリーにリネームした API になります。
-* 作成中...
+**Device API** を複雑に組み合わせた API になります。条件分岐などが発生する単純なリダイレクトでは制御できない内容を取り扱う API を定義しています。（作成中）
 
 IR MAP
 ------
@@ -106,6 +127,10 @@ TOOLs
 * **/hue/register.js**
 	* hue へユーザー ID の発行を依頼します。
 	* 使用例: ```$ node ./tool/hue/search.js```
+
+外部からの操作
+--------------
+ベーシック認証をかけて外部へ一部の API を公開しています（未実装）。
 
 MEMO
 ----

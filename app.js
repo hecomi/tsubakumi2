@@ -10,7 +10,7 @@ app.enable('jsonp callback');
 for (var key in settings) {
 	app.set(key, settings[key]);
 }
-app.set('address', ip.address() + ':' + app.get('port'));
+app.set('address', 'http://' + ip.address() + ':' + app.get('port'));
 
 // Middlewares
 // --------------------------------------------------------------------------------
@@ -42,14 +42,15 @@ app.get('/device/hue/:api/:arg1/:arg2/:arg3', routes.device.hue);
 
 // Macro APIs
 // --------------------------------------------------------------------------------
+app.get('/macro/*', routes.macro);
 
 // Errors
 // --------------------------------------------------------------------------------
 app.get('404', routes.notfound);
 
-// Redirect
+// Aliases
 // --------------------------------------------------------------------------------
-app.get('*', routes.redirect);
+app.get('*', require('./routes/redirect')(app));
 
 // Start Server
 // --------------------------------------------------------------------------------

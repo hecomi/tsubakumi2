@@ -1,13 +1,10 @@
 var request = require('request');
-var printf  = require('printf');
 
 module.exports = function(app) {
 	return {
-		device   : require('./device')(app),
-		macro    : require('./macro')(app),
-		redirect : function(req, res) {
-			var url = printf('http://%s/device/iremocon/is%s', app.get('address'), req.params[0]);
-			request.get(url).pipe(res);
+		device : require('./device')(app),
+		macro : require('./macro')(app),
+		setIremoconAlias : function() {
 		},
 		notfound : function(req, res) {
 			res.status(404);

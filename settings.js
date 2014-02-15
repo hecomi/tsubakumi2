@@ -2,6 +2,7 @@ var secret = require('./settings.secret');
 
 module.exports = {
 	port: process.env.PORT || 23456,
+	redirectMap: require('./redirect-map'),
 	DB: {
 		host        : 'localhost',
 		port        : 27017,
