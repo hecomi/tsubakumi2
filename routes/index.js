@@ -2,13 +2,10 @@ var request = require('request');
 
 module.exports = function(app) {
 	return {
-		device : require('./device')(app),
-		macro : require('./macro')(app),
-		setIremoconAlias : function() {
-		},
+		device   : require('./device')(app),
+		macro    : require('./macro')(app),
 		notfound : function(req, res) {
-			res.status(404);
-			throw new Error(req.url + ' is not found.');
+			res.jsonp(404, { error: 'Not found' });
 		}
 	};
 };

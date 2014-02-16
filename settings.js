@@ -1,8 +1,12 @@
+var ip     = require('ip');
 var secret = require('./settings.secret');
+
+var port = process.env.PORT || 23456;
 
 module.exports = function(app) {
 	return {
-		port     : process.env.PORT || 23456,
+		port     : port,
+		address  : 'http://' + ip.address() + ':' + port,
 		aliasMap : require('./alias-map'),
 		macroMap : require('./macro-map')(app),
 		DB: {

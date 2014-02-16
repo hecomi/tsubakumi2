@@ -1,5 +1,4 @@
 var fs       = require('fs');
-var ip       = require('ip');
 var express  = require('express');
 var app      = express();
 var settings = require('./settings')(app);
@@ -10,7 +9,6 @@ app.enable('jsonp callback');
 for (var key in settings) {
 	app.set(key, settings[key]);
 }
-app.set('address', 'http://' + ip.address() + ':' + app.get('port'));
 
 // Middlewares
 // --------------------------------------------------------------------------------
@@ -46,7 +44,7 @@ app.get('/macro/*', routes.macro);
 
 // Errors
 // --------------------------------------------------------------------------------
-app.get('404', routes.notfound);
+app.get('/404', routes.notfound);
 
 // Aliases
 // --------------------------------------------------------------------------------

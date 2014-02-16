@@ -48,6 +48,6 @@ module.exports = function(app) {
 		});
 		if (endFlag) return;
 
-		res.redirect('/404');
+		request.get(app.get('address') + '/404').pipe(res);
 	};
 };

@@ -16,5 +16,8 @@ module.exports = {
 	'/entrance/light/off' : '/device/hue/off/1',
 	'/kitchen/light/off'  : ['/device/hue/off/2', '/device/hue/off/3'],
 	'/room/light/off'     : '/light/off',
-	'/all/light/off'      : ['/entrance/light/off', '/kitchen/light/off', '/room/light/off']
+	'/all/light/off'      : ['/entrance/light/off', '/kitchen/light/off', '/room/light/off'],
+
+	// projector
+	'/projector/shutdown' : '/macro/projector/shutdown'
 };
