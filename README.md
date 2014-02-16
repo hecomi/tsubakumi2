@@ -77,7 +77,25 @@ module.exports = {
 
 Macro APIs
 ----------
-**Device API** を複雑に組み合わせた API になります。条件分岐などが発生する単純なリダイレクトでは制御できない内容を取り扱う API を定義しています。（作成中）
+**Device API** を複雑に組み合わせた API になります。条件分岐などが発生する単純なリダイレクトでは制御できない内容を取り扱う API を定義しています。```./macro-map.js``` に一連のマクロを定義しています。
+例えば下記例では、1 秒おきに二度続けて同じ IR 信号を発信する例になります。
+
+```javascript
+module.exports = function(app) {
+	return {
+		...
+		'projector/shutdown': function(req, res) {
+			_(2).times(function(n) {
+				setTimeout(function() {
+					var req = request.get(app.get('address') + '/projector/off');
+					if (n === 1) req.pipe(res);
+				}, 1000 * n);
+			});
+		}
+		...
+	};
+};
+```
 
 IR MAP
 ------

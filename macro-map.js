@@ -7,7 +7,7 @@ module.exports = function(app) {
 			_(2).times(function(n) {
 				setTimeout(function() {
 					var req = request.get(app.get('address') + '/projector/off');
-					if (n == 1) req.pipe(res);
+					if (n === 1) req.pipe(res);
 				}, 1000 * n);
 			});
 		}
