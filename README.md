@@ -69,7 +69,7 @@ module.exports = {
 };
 ```
 
-ここでは、```/device/hue/on/1``` を ```/entrance/light/on``` という名前に書き換えたり、これらを組み合わせて同時に実行する API を定義しています。
+ここでは、```/device/hue/on/1``` を ```/entrance/light/on``` という名前に書き換えたり、これらを組み合わせて同時に実行する ```/all/light/on``` などの API を定義しています。
 
 * 使用例
 	* http://192.168.0.10:23456/entrance/light/on
