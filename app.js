@@ -1,8 +1,8 @@
+var fs       = require('fs');
+var ip       = require('ip');
 var express  = require('express');
 var app      = express();
-var fs       = require('fs');
-var settings = require('./settings');
-var ip       = require('ip');
+var settings = require('./settings')(app);
 
 // Settings
 // --------------------------------------------------------------------------------
@@ -50,11 +50,10 @@ app.get('404', routes.notfound);
 
 // Aliases
 // --------------------------------------------------------------------------------
-app.get('*', require('./routes/redirect')(app));
+app.get('*', require('./routes/alias')(app));
 
 // Start Server
 // --------------------------------------------------------------------------------
 app.listen(app.get('port'));
-var settings = require('./settings');
 console.log('PORT:', app.get('port'));
 

@@ -9,12 +9,11 @@ var InvalidMacroError = function(msg) {
 };
 
 module.exports = function(app) {
-	var macroMap = require('../../macro-map')(app);
 	return function(req, res) {
-		for (var url in macroMap) {
+		for (var url in app.get('macroMap')) {
 			console.log(url);
 			if (req.params[0] === url) {
-				macroMap[url](req, res);
+				app.get('macroMap')[url](req, res);
 				return;
 			}
 		}
