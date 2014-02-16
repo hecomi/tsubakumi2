@@ -1,4 +1,4 @@
-var settings = require('../../settings').iRemocon;
+var settings = require('../../settings')(null).iRemocon;
 var irMap    = require('../../ir-map');
 var iRemocon = require('iremocon');
 var readline = require('readline');

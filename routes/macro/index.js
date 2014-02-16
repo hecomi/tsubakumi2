@@ -11,7 +11,6 @@ var InvalidMacroError = function(msg) {
 module.exports = function(app) {
 	return function(req, res) {
 		for (var url in app.get('macroMap')) {
-			console.log(url);
 			if (req.params[0] === url) {
 				app.get('macroMap')[url](req, res);
 				return;

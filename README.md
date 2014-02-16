@@ -3,7 +3,7 @@ TSUBAKUMI
 
 はじめに
 --------
-@hecomi 家の**ホームコントロールシステム**です。**iRemocon**、**WeMO**、**hue** などの各種ガジェットの機能を WebAPI 化し、そこから操作できる機器や動作の組み合わせを更に **WebAPI** 化しています。これにより、他のガジェット（PCやスマホ、Pebble など）から一通りの家電操作を可能とするシステムとなっています。
+@hecomi 家の**ホームコントロールシステム**です。iRemocon、WeMO、hue などの各種ガジェットの機能を WebAPI 化し、そこから操作できる機器や動作の組み合わせを更に WebAPI 化しています。これにより、他のガジェット（PCやスマホ、Pebble など）から一通りの家電操作を可能とするシステムとなっています。
 例えば、以下の様な URL を叩くと家電を操作することが出来ます。
 * http://192.168.0.10:23456/projector/on
 * http://192.168.0.10:23456/projector/hdmi/2
@@ -17,34 +17,34 @@ TSUBAKUMI
 
 設定
 ----
-```./setting.js``` に一通りの設定（機器の IP など）を記述しています。また、hue のユーザー ID の様に公開したくないものに関しては、```./settings.secret.js``` に記述し、```.gitignore``` で除外しています。
+`./setting.js` に一通りの設定（機器の IP など）を記述しています。また、hue のユーザー ID の様に公開したくないものに関しては、`./settings.secret.js` に記述し、`.gitignore` で除外しています。
 
 Device APIs
 -----------
 直接操作できる機器の WebAPI になります。iRemocon、WeMo Switch、WeMo Motion、hue に現在対応しています。
 
 * **/device/iremocon/:api**
-	* ```:api``` は ```list```、```au```、```is```、```ic```、```cc``` が使えます。
-	* ```is``` では ```./ir-map.js``` で記述した名前でも呼び出すことが出来ます。
+	* `:api` は `list`、`au`、`is`、`ic`、`cc` が使えます。
+	* `is` では `./ir-map.js` で記述した名前でも呼び出すことが出来ます。
 	* 使用例
 		* http://192.168.0.10:23456/device/iremocon/list
 		* http://192.168.0.10:23456/device/iremocon/is/10
 		* http://192.168.0.10:23456/device/iremocon/is/light/on
-	* また、```is``` は省略名でも呼び出すことが出来ます。
+	* また、`is` は省略名でも呼び出すことが出来ます。
 		* http://192.168.0.10:23456/10
 		* http://192.168.0.10:23456/light/on
 
 * **/device/wemo/:kind/:target/:api**
-	* ```:kind``` には ```switch``` か ```motion``` を指定します。
-	* ```:target``` は ```./search.js``` に記述した識別名を指定します。
-	* ```:api``` は両者共通で ```state```、```switch``` に関しては ```on```、```off``` に対応しています。
+	* `:kind` には `switch` か `motion` を指定します。
+	* `:target` は `./search.js` に記述した識別名を指定します。
+	* `:api` は両者共通で `state`、`switch` に関しては `on`、`off` に対応しています。
 	* 使用例
 		* http://192.168.0.10:23456/device/wemo/switch/monitor/on
 		* http://192.168.0.10:23456/device/wemo/motion/entrance/state
 
 * **/device/hue/:api/:arg1/:arg2/:arg3**
-	* ```:api``` は情報を取得する ```lights```、```fullState```、```registeredUsers```、```lightStatus``` と、状態をセットする ```on```、```off```、```rgb```、```hsl```、```xy```、```white```、```brightness```、```alert``` があります。
-	* 状態セット系は、```:arg1``` に機器番号、```:arg2``` に状態を入れます。また、オプショナルの ```:arg3``` で遷移時間を指定できます。
+	* `:api` は情報を取得する `lights`、`fullState`、`registeredUsers`、`lightStatus` と、状態をセットする `on`、`off`、`rgb`、`hsl`、`xy`、`white`、`brightness`、`alert` があります。
+	* 状態セット系は、`:arg1` に機器番号、`:arg2` に状態を入れます。また、オプショナルの `:arg3` で遷移時間を指定できます。
 	* 使用例
 		* http://192.168.0.10:23456/device/hue/fullState
 		* http://192.168.0.10:23456/device/hue/rgb/1/255,0,0
@@ -55,7 +55,7 @@ Device APIs
 
 IR MAP
 ------
-機器のほとんどは IR で操作します。そのため ```./ir-map.js``` に、iRemocon に学習させる IR の番号および、その機能を定義しています。
+機器のほとんどは IR で操作します。そのため `./ir-map.js` に、iRemocon に学習させる IR の番号および、その機能を定義しています。
 
 ```javascript
 module.exports = {
@@ -72,13 +72,13 @@ module.exports = {
 };
 ```
 
-これらは ```tool/iremocon/learn.js``` で学習することが出来ます。
-そして Device/iRemocon API で ```/device/iremocon/is/1``` や、```/device/iremocon/is/projector/on``` といった形で呼び出すことが出来ます。
+これらは `tool/iremocon/learn.js` で学習することが出来ます。
+そして Device/iRemocon API で `/device/iremocon/is/1` や、`/device/iremocon/is/projector/on` といった形で呼び出すことが出来ます。
 
 Alias APIs
 ----------
 **Device API** を単純に組み合わせたり、ユーザフレンドリーにリネームした API です。
-```./redirect-map.js``` に記載した通りにルーティングを行います。
+```./redirect-map.js` に記載した通りにルーティングを行います。
 
 ```javascript
 module.exports = {
@@ -91,7 +91,7 @@ module.exports = {
 };
 ```
 
-ここでは、```/device/hue/on/1``` を ```/entrance/light/on``` という名前に書き換えたり、これらを組み合わせて同時に実行する ```/all/light/on``` などの API を定義しています。
+ここでは、`/device/hue/on/1` を `/entrance/light/on` という名前に書き換えたり、これらを組み合わせて同時に実行する `/all/light/on` などの API を定義しています。
 
 * 使用例
 	* http://192.168.0.10:23456/entrance/light/on
@@ -99,7 +99,7 @@ module.exports = {
 
 Macro APIs
 ----------
-**Device API** を複雑に組み合わせた API になります。条件分岐などが発生する単純なリダイレクトでは制御できない内容を取り扱う API を定義しています。```./macro-map.js``` に一連のマクロを定義しています。
+**Device API** を複雑に組み合わせた API になります。条件分岐などが発生する単純なリダイレクトでは制御できない内容を取り扱う API を定義しています。`./macro-map.js` に一連のマクロを定義しています。
 例えば下記例では、1 秒おきに二度続けて同じ IR 信号を発信する例になります。
 
 ```javascript
@@ -121,27 +121,27 @@ module.exports = function(app) {
 
 TOOLs
 -----
-各種ガジェットの設定に必要なスクリプトが ```tool``` 以下に入っています。
+各種ガジェットの設定に必要なスクリプトが `tool` 以下に入っています。
 
 * **/iremocon/search.js**
 	* iRemocon の発見に使います。au コマンドを利用しています。
-	* 使用例: ```$ node ./tool/iremocon/search.js '192.168.1.'```
+	* 使用例: `$ node ./tool/iremocon/search.js '192.168.1.'`
 
 * **/iremocon/learn.js**
-	* ```./ir-map.js``` に記述された情報を元に赤外線リモコンの対話的学習を行います。
-	* 使用例: ```$ node ./tool/iremocon/learn.js -f 50 -t 60```
+	* `./ir-map.js` に記述された情報を元に赤外線リモコンの対話的学習を行います。
+	* 使用例: `$ node ./tool/iremocon/learn.js -f 50 -t 60`
 
 * **/wemo/search.js**
 	* WeMo の発見に使います。SSDP で探します。
-	* 使用例: ```$ node ./tool/wemo/search.js```
+	* 使用例: `$ node ./tool/wemo/search.js`
 
 * **/hue/search.js**
 	* hue の発見に使います。
-	* 使用例: ```$ node ./tool/hue/search.js```
+	* 使用例: `$ node ./tool/hue/search.js`
 
 * **/hue/register.js**
 	* hue へユーザー ID の発行を依頼します。
-	* 使用例: ```$ node ./tool/hue/search.js```
+	* 使用例: `$ node ./tool/hue/search.js`
 
 外部からの操作
 --------------

@@ -55,3 +55,9 @@ app.get('*', require('./routes/alias')(app));
 app.listen(app.get('port'));
 console.log('PORT:', app.get('port'));
 
+// Start Events
+// --------------------------------------------------------------------------------
+app.get('eventMap').forEach(function(event) {
+	console.log(event);
+	setInterval(event.func, event.interval);
+});

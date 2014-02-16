@@ -7,7 +7,7 @@ module.exports = function(app) {
 		var endFlag = false;
 
 		// From reirect-map.js
-		var redirectMap = app.get('redirectMap');
+		var redirectMap = app.get('aliasMap');
 		_.keys(redirectMap).forEach(function(api) {
 			if (url === api) {
 				endFlag = true;
