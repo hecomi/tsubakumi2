@@ -53,6 +53,28 @@ Device APIs
 	* TODO
 		* 機器番号は機器名でも可能にする
 
+IR MAP
+------
+機器のほとんどは IR で操作します。そのため ```./ir-map.js``` に、iRemocon に学習させる IR の番号および、その機能を定義しています。
+
+```javascript
+module.exports = {
+	1  : ['light high', 'light on'],
+	2  : 'light medium-high',
+	3  : 'light medium-low',
+	4  : 'light low',
+	5  : 'light midget',
+	6  : 'light off',
+	7  : 'monitor off',
+	8  : 'monitor on',
+	9  : ['projector on', 'projector off'],
+	...
+};
+```
+
+これらは ```tool/iremocon/learn.js``` で学習することが出来ます。
+そして Device/iRemocon API で ```/device/iremocon/is/1``` や、```/device/iremocon/is/projector/on``` といった形で呼び出すことが出来ます。
+
 Alias APIs
 ----------
 **Device API** を単純に組み合わせたり、ユーザフレンドリーにリネームした API です。
@@ -97,28 +119,6 @@ module.exports = function(app) {
 };
 ```
 
-IR MAP
-------
-機器のほとんどは IR で操作します。そのため ```./ir-map.js``` に、iRemocon に学習させる IR の番号および、その機能を定義しています。
-
-```javascript
-module.exports = {
-	1  : ['light high', 'light on'],
-	2  : 'light medium-high',
-	3  : 'light medium-low',
-	4  : 'light low',
-	5  : 'light midget',
-	6  : 'light off',
-	7  : 'monitor off',
-	8  : 'monitor on',
-	9  : ['projector on', 'projector off'],
-	...
-};
-```
-
-これらは ```tool/iremocon/learn.js``` で学習することが出来ます。
-そして Device/iRemocon API で ```/device/iremocon/is/1``` や、```/device/iremocon/is/projector/on``` といった形で呼び出すことが出来ます。
-
 TOOLs
 -----
 各種ガジェットの設定に必要なスクリプトが ```tool``` 以下に入っています。
@@ -130,9 +130,6 @@ TOOLs
 * **/iremocon/learn.js**
 	* ```./ir-map.js``` に記述された情報を元に赤外線リモコンの対話的学習を行います。
 	* 使用例: ```$ node ./tool/iremocon/learn.js -f 50 -t 60```
-
-* **/iremocon/stop_learning.js**
-	* 学習中止の cc コマンドを発行します。
 
 * **/wemo/search.js**
 	* WeMo の発見に使います。SSDP で探します。
