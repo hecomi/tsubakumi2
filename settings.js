@@ -30,15 +30,13 @@ module.exports = function(app) {
 			// モニタのスイッチ
 			switches : {
 				monitor: {
-					ip: '192.168.0.9',
-					port: 49153
+					name: 'Hecomi WeMo Switch 1'
 				}
 			},
 			// 玄関
 			motions : {
 				entrance: {
-					ip: '192.168.0.14',
-					port: 49154
+					name: 'Hecomi WeMo Motion 1'
 				}
 			}
 		},

@@ -61,3 +61,9 @@ app.get('eventMap').forEach(function(event) {
 	console.log(event);
 	setInterval(event.func, event.interval);
 });
+
+// Unexpected Errors
+// --------------------------------------------------------------------------------
+process.on('uncaughtException', function(err) {
+	console.error('UNCAUGHT EXCEPTION:', err);
+});
