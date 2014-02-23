@@ -1,8 +1,18 @@
 var request = require('request');
 var _       = require('underscore');
 var get     = require('../utilities').get;
+var exec    = require('child_process').exec;
 
 module.exports = {
+	'restart': function(req, res) {
+		exec('touch app.js', function(err, stdout) {
+			if (err) throw err;
+			res.jsonp({
+				command: stdout,
+				msg: 'restarted'
+			});
+		});
+	},
 	'projector/shutdown': function(req, res) {
 		_(2).times(function(n) {
 			setTimeout(function() {

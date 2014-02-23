@@ -1,6 +1,15 @@
 module.exports = [
 	{
 		word: [
+			'再起動',
+		],
+		rule: {
+			reply: '再起動します',
+			api: '/restart'
+		}
+	},
+	{
+		word: [
 			'天気教えて',
 		],
 		rule: {

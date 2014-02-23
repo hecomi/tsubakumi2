@@ -1,4 +1,7 @@
 module.exports = {
+	// all
+	'/restart' : '/macro/restart',
+
 	// monitors
 	'/mac/monitor/on'      : '/device/wemo/switch/monitor/on',
 	'/mac/monitor/off'     : '/device/wemo/switch/monitor/off',

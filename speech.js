@@ -47,6 +47,7 @@ speechMap.push({
 	rule: {
 		recogStartRule: true,
 		func: function() {
+			get('/restart');
 			if (recognizing) {
 				openjtalk.talk('既に開始してますよ！');
 			} else {
