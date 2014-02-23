@@ -21,7 +21,8 @@ module.exports = {
 	'/all/light/off'      : ['/hallway/light/off', '/room/light/off'],
 
 	// projector
-	'/projector/shutdown' : '/macro/projector/shutdown',
+	'/projector/shutdown'   : '/macro/projector/shutdown',
+	'/projector/input/hdmi' : '/macro/projector/input/hdmi',
 
 	// wemo
 	'/entrance/motion' : '/device/wemo/motion/entrance/state',

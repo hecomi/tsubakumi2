@@ -9,7 +9,7 @@ module.exports = function(app) {
 		port     : port,
 		address  : 'http://' + ip.address() + ':' + port,
 		aliasMap : require('./settings/alias-map'),
-		macroMap : require('./settings/macro-map')(app),
+		macroMap : require('./settings/macro-map'),
 		DB: {
 			host        : 'localhost',
 			port        : 27017,

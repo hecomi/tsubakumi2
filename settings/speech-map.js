@@ -193,10 +193,17 @@ module.exports = [
 		}
 	},
 	{
-		word: 'プロジェクタソース',
+		word: 'プロジェクタの?ソース(を表示)?',
 		rule: {
 			reply: 'ソース',
 			api: '/projector/source'
+		}
+	},
+	{
+		word: 'プロジェクタで?エッチディーエムアイ(を表示)?',
+		rule: {
+			reply: 'エッチディーエムアイを表示します',
+			api: '/projector/input/hdmi'
 		}
 	},
 	{
@@ -449,6 +456,13 @@ module.exports = [
 		rule: {
 			reply: 'ディスプレイ',
 			api: '/ps3/display'
+		}
+	},
+	{
+		word: 'プレステで?トルネを起動',
+		rule: {
+			reply: 'トルネを起動します',
+			api: '/ps3/torne'
 		}
 	},
 	{
