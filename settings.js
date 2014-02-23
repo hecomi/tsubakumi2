@@ -1,15 +1,15 @@
 var ip     = require('ip');
-var secret = require('./settings.secret');
+var secret = require('./settings/settings.secret');
 
 var port = process.env.PORT || 23456;
 
 module.exports = function(app) {
+	app = app || {};
 	return {
 		port     : port,
 		address  : 'http://' + ip.address() + ':' + port,
-		aliasMap : require('./alias-map'),
-		macroMap : require('./macro-map')(app),
-		eventMap : require('./event-map')(app),
+		aliasMap : require('./settings/alias-map'),
+		macroMap : require('./settings/macro-map')(app),
 		DB: {
 			host        : 'localhost',
 			port        : 27017,
@@ -20,7 +20,7 @@ module.exports = function(app) {
 		},
 		iRemocon: {
 			ip    : '192.168.0.12',
-			irMap : require('./ir-map'),
+			irMap : require('./settings/ir-map'),
 			test  : {
 				checkIrNum : 999,  // テストする IR 番号
 				isCheckIc  : false // 赤外線の学習のテストをするか
