@@ -1,8 +1,9 @@
-var settings = require('../settings')();
-var get      = require('../utilities').get;
+var get   = require('../utilities').get;
+var Timer = require('../utilities').Timer;
 
 // Parameters
 var hallwayLightState = 0;
+var hallwayTimer = new Timer();
 
 // Rules
 module.exports = [
@@ -15,9 +16,12 @@ module.exports = [
 				if (newState !== hallwayLightState) {
 					hallwayLightState = newState;
 					if (hallwayLightState === 1) {
+						hallwayTimer.stop();
 						get('/hallway/light/on');
 					} else {
-						get('/hallway/light/off');
+						hallwayTimer.start(function() {
+							get('/hallway/light/off');
+						}, 10000);
 					}
 				}
 			});
