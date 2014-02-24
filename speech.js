@@ -1,4 +1,3 @@
-var settings    = require('./settings');
 var speechMap   = require('./settings/speech-map');
 var get         = require('./utilities').get;
 var _           = require('underscore');

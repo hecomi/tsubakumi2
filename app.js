@@ -1,7 +1,7 @@
 var fs       = require('fs');
 var express  = require('express');
 var app      = express();
-var settings = require('./settings')(app);
+var settings = require('./settings');
 
 // Settings
 // --------------------------------------------------------------------------------

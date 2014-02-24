@@ -1,4 +1,3 @@
-var request = require('request');
 var _       = require('underscore');
 var get     = require('../utilities').get;
 var exec    = require('child_process').exec;
