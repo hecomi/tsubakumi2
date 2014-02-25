@@ -9,11 +9,10 @@ module.exports = [
 		}
 	},
 	{
-		word: [
-			'天気教えて',
-		],
+		word: '(明日の|今日の)?天気(教えて)?',
 		rule: {
-			func: function() {
+			func: function(str) {
+				return str + 'だって？、ググれカス！';
 			}
 		}
 	},
