@@ -1,14 +1,15 @@
-TSUBAKUMI
-=========
+TSUBAKUMI 2
+===========
 
 はじめに
 --------
-@hecomi 家の**ホームコントロールシステム**です。iRemocon、WeMO、hue などの各種ガジェットの機能を WebAPI 化し、そこから操作できる機器や動作の組み合わせを更に WebAPI 化しています。これにより、他のガジェット（PCやスマホ、Pebble など）から一通りの家電操作を可能とするシステムとなっています。
+@hecomi 家の**ホームコントロールシステム**の２世代目です。iRemocon、WeMO、hue などの各種ガジェットの機能を WebAPI 化し、そこから操作できる機器や動作の組み合わせを更に WebAPI 化しています。これにより、他のガジェット（PCやスマホ、Pebble など）から一通りの家電操作を可能とするシステムとなっています。
 例えば、以下の様な URL を叩くと家電を操作することが出来ます。
 * http://192.168.0.10:23456/projector/on
 * http://192.168.0.10:23456/projector/hdmi/2
 * http://192.168.0.10:23456/aircon/degree/20
 * http://192.168.0.10:23456/ps3/left
+また、これらの API を利用して、人の動きを検知すると自動でつく照明や、音声認識による家電操作をしています。
 
 環境
 ----
@@ -25,7 +26,7 @@ Device APIs
 
 * **/device/iremocon/:api**
 	* `:api` は `list`、`au`、`is`、`ic`、`cc` が使えます。
-	* `is` では `./ir-map.js` で記述した名前でも呼び出すことが出来ます。
+	* `is` では `./settings/ir-map.js` で記述した名前でも呼び出すことが出来ます。
 	* 使用例
 		* http://192.168.0.10:23456/device/iremocon/list
 		* http://192.168.0.10:23456/device/iremocon/is/10
@@ -55,7 +56,7 @@ Device APIs
 
 IR MAP
 ------
-機器のほとんどは IR で操作します。そのため `./ir-map.js` に、iRemocon に学習させる IR の番号および、その機能を定義しています。
+機器のほとんどは IR で操作します。そのため `./settings/ir-map.js` に、iRemocon に学習させる IR の番号および、その機能を定義しています。
 
 ```javascript
 module.exports = {
@@ -78,7 +79,7 @@ module.exports = {
 Alias APIs
 ----------
 **Device API** を単純に組み合わせたり、ユーザフレンドリーにリネームした API です。
-```./redirect-map.js` に記載した通りにルーティングを行います。
+```./settings/alias-map.js` に記載した通りにルーティングを行います。
 
 ```javascript
 module.exports = {
@@ -99,7 +100,7 @@ module.exports = {
 
 Macro APIs
 ----------
-**Device API** を複雑に組み合わせた API になります。条件分岐などが発生する単純なリダイレクトでは制御できない内容を取り扱う API を定義しています。`./macro-map.js` に一連のマクロを定義しています。
+**Device API** を複雑に組み合わせた API になります。条件分岐などが発生する単純なリダイレクトでは制御できない内容を取り扱う API を定義しています。`./settings/macro-map.js` に一連のマクロを定義しています。
 例えば下記例では、1 秒おきに二度続けて同じ IR 信号を発信する例になります。
 
 ```javascript
@@ -119,6 +120,51 @@ module.exports = function(app) {
 };
 ```
 
+Voice Recognition
+-----------------
+音声認識に対応して何を行うかを './settings/speech-map.js' に定義しています。
+また、音声認識結果に対する応答は、OpenJTalk によって音声合成された声で返ってきます。
+
+```javascript
+module.exports = [
+	{
+		word: [ 'ワード1', 'ワード2' ],
+		rule: {
+			reply: 'ほげほげを実行します', // 応答で喋る言葉
+			api: '/hogehoge' // 実行する API
+		},
+	},
+	{
+		word: '(明日の|今日の)?天気(教えて)?',
+		rule: {
+			func: function(str) {
+				// return で返した言葉を喋る
+				return str + 'だって？、ググれカス！';
+			}
+		}
+	},
+	...
+];
+```
+
+Event
+-----
+定期的に行いたいものを './settings/event-map.js' に定義しています。例えば WeMo Motion のポーリングをして、動きがあったらライトをつける、といったことをしています。
+
+```javascript
+module.exports = [
+	{
+		name     : 'event name',
+		interval : 1000, // msec
+		func     : function() {
+			...
+		},
+		...
+	}
+];
+```
+
+
 TOOLs
 -----
 各種ガジェットの設定に必要なスクリプトが `tool` 以下に入っています。
@@ -128,7 +174,7 @@ TOOLs
 	* 使用例: `$ node ./tool/iremocon/search.js '192.168.1.'`
 
 * **/iremocon/learn.js**
-	* `./ir-map.js` に記述された情報を元に赤外線リモコンの対話的学習を行います。
+	* `./settings/ir-map.js` に記述された情報を元に赤外線リモコンの対話的学習を行います。
 	* 使用例: `$ node ./tool/iremocon/learn.js -f 50 -t 60`
 
 * **/wemo/search.js**
