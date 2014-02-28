@@ -108,8 +108,8 @@ grammar.compile(function(err, result) {
 				}
 				if (rule.func)  {
 					console.log('  ==> func');
-					var reply = rule.func(str);
-					if (reply) openjtalk.talk(reply);
+					var word = rule.func(str);
+					if (word) openjtalk.talk(word);
 				}
 				if (rule.api) {
 					console.log('  ==>', rule.api);
