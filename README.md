@@ -81,7 +81,7 @@ module.exports = {
 Alias APIs
 ----------
 **Device API** を単純に組み合わせたり、ユーザフレンドリーにリネームした API です。
-```./settings/alias-map.js` に記載した通りにルーティングを行います。
+`./settings/alias-map.js` に記載した通りにルーティングを行います。
 
 ```javascript
 module.exports = {
@@ -102,7 +102,8 @@ module.exports = {
 
 Macro APIs
 ----------
-**Device API** を複雑に組み合わせた API になります。条件分岐などが発生する単純なリダイレクトでは制御できない内容を取り扱う API を定義しています。`./settings/macro-map.js` に一連のマクロを定義しています。
+**Device API** を複雑に組み合わせた API になります。
+条件分岐などが発生する単純なリダイレクトでは制御できない内容を取り扱う API を定義しています。`./settings/macro-map.js` に一連のマクロを定義しており、`./settings/macro-map.js` に定義されています。
 例えば下記例では、1 秒おきに二度続けて同じ IR 信号を発信する例になります。
 
 ```javascript
@@ -124,8 +125,8 @@ module.exports = function(app) {
 
 Event
 -----
-定期的に行いたいものを './settings/event-map.js' に定義しています。例えば WeMo Motion のポーリングをして、動きがあったらライトをつける、といったことをしています。
-処理は './event.js' が行います。
+定期的に行いたいものを `./settings/event-map.js` に定義しています。例えば WeMo Motion のポーリングをして、動きがあったらライトをつける、といったことをしています。
+処理は `./event.js` が行います。
 
 ```javascript
 module.exports = [
@@ -142,9 +143,9 @@ module.exports = [
 
 Voice Recognition
 -----------------
-音声認識に対応して何を行うかを './settings/speech-map.js' に定義しています。
+音声認識に対応して何を行うかを `./settings/speech-map.js` に定義しています。
 また、音声認識結果に対する応答は、OpenJTalk によって音声合成された声で返ってきます。
-処理は './speech.js' が行います。
+処理は `./speech.js` が行います。
 
 ```javascript
 module.exports = [
@@ -170,7 +171,7 @@ module.exports = [
 
 Twitter
 -------
-Twitter からの操作を './twitter.js' で行っています。
+Twitter からの操作を `./twitter.js` で行っています。
 ここでは、入力を音声認識の代わりに Twitter での対象のアカウントに対してつぶやき、出力を OpenJTalk による発話の代わりに Twitter での返信にも対応しています。
 
 
