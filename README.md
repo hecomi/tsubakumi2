@@ -122,10 +122,29 @@ module.exports = function(app) {
 };
 ```
 
+Event
+-----
+定期的に行いたいものを './settings/event-map.js' に定義しています。例えば WeMo Motion のポーリングをして、動きがあったらライトをつける、といったことをしています。
+処理は './event.js' が行います。
+
+```javascript
+module.exports = [
+	{
+		name     : 'event name',
+		interval : 1000, // msec
+		func     : function() {
+			...
+		},
+		...
+	}
+];
+```
+
 Voice Recognition
 -----------------
 音声認識に対応して何を行うかを './settings/speech-map.js' に定義しています。
 また、音声認識結果に対する応答は、OpenJTalk によって音声合成された声で返ってきます。
+処理は './speech.js' が行います。
 
 ```javascript
 module.exports = [
@@ -149,22 +168,10 @@ module.exports = [
 ];
 ```
 
-Event
------
-定期的に行いたいものを './settings/event-map.js' に定義しています。例えば WeMo Motion のポーリングをして、動きがあったらライトをつける、といったことをしています。
-
-```javascript
-module.exports = [
-	{
-		name     : 'event name',
-		interval : 1000, // msec
-		func     : function() {
-			...
-		},
-		...
-	}
-];
-```
+Twitter
+-------
+Twitter からの操作を './twitter.js' で行っています。
+ここでは、入力を音声認識の代わりに Twitter での対象のアカウントに対してつぶやき、出力を OpenJTalk による発話の代わりに Twitter での返信にも対応しています。
 
 
 TOOLs
@@ -195,9 +202,10 @@ TOOLs
 --------------
 ベーシック認証をかけて外部へ一部の API を公開しています（未実装）。
 
-MEMO
+TODO
 ----
-エアコンの赤外線の形式は特殊なので、現状の IR MAP だと上手く行っていないかも...
+* エアコンの赤外線の形式は特殊なので、現状の IR MAP だと上手く行っていないかもなので調べる
+* OpenJTalk は API 化する
 
 LICENSE
 -------

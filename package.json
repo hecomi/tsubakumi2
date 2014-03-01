@@ -19,7 +19,8 @@
     "should": "~3.1.2",
     "underscore": "~1.6.0",
     "request": "~2.34.0",
-    "twitter": "^0.2.7"
+    "twitter": "^0.2.7",
+    "date-utils": "^1.2.15"
   },
   "repository": {
     "type": "git",
