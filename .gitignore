@@ -1,2 +1,2 @@
 node_modules
-settings.secret.js
+settings/settings.secret.js

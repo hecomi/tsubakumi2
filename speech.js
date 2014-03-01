@@ -11,7 +11,6 @@ var recognizing = true;
 var OpenJTalk   = require('openjtalk');
 var openjtalk   = new OpenJTalk();
 
-
 // ゴミワード
 var gomi = 'あいうえお';
 for (var i = 0; i < gomi.length; ++i) {
@@ -109,14 +108,12 @@ grammar.compile(function(err, result) {
 				if (rule.func)  {
 					console.log('  ==> func');
 					var word = rule.func(str);
-					if (word) openjtalk.talk(word);
+					if (word) reply(word);
 				}
 				if (rule.api) {
 					console.log('  ==>', rule.api);
 					var apis = (rule.api instanceof Array) ? rule.api : [rule.api];
-					apis.forEach(function(api) {
-						get(api);
-					});
+					apis.forEach(api);
 				}
 			}
 		});

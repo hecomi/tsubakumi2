@@ -42,5 +42,6 @@ module.exports = {
 		id   : '001788fffe15ccd4',
 		ip   : '192.168.0.8',
 		user : secret.hue.user
-	}
+	},
+	twitter: secret.twitter
 };

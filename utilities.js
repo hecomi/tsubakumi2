@@ -4,6 +4,7 @@ http.globalAgent.maxSockets = 100;
 var timeout = 3000;
 
 // Request API
+// --------------------------------------------------------------------------------
 exports.get = function(api, callback) {
 	var req = http.get({
 		host : settings.host,
@@ -34,6 +35,7 @@ exports.get = function(api, callback) {
 };
 
 // Timer
+// --------------------------------------------------------------------------------
 var Timer = function() {
 	this.timer = null;
 };
@@ -57,7 +59,8 @@ Timer.prototype = {
 exports.Timer = Timer;
 
 // Flag with Timer
-FlagTimer = function(defaultFlag) {
+// --------------------------------------------------------------------------------
+var FlagTimer = function(defaultFlag) {
 	this.timer = new Timer();
 	this.flag = defaultFlag;
 };
