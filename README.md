@@ -22,8 +22,8 @@ TSUBAKUMI 2
 ----
 `./setting.js` に一通りの設定（機器の IP など）を記述しています。また、hue のユーザー ID の様に公開したくないものに関しては、`./settings.secret.js` に記述し、`.gitignore` で除外しています。
 
-Device APIs
------------
+Device API
+----------
 直接操作できる機器の WebAPI になります。iRemocon、WeMo Switch、WeMo Motion、hue に現在対応しています。
 
 * **/device/iremocon/:api**
@@ -78,8 +78,8 @@ module.exports = {
 これらは `tool/iremocon/learn.js` で学習することが出来ます。
 そして Device/iRemocon API で `/device/iremocon/is/1` や、`/device/iremocon/is/projector/on` といった形で呼び出すことが出来ます。
 
-Alias APIs
-----------
+Alias API
+---------
 **Device API** を単純に組み合わせたり、ユーザフレンドリーにリネームした API です。
 `./settings/alias-map.js` に記載した通りにルーティングを行います。
 
@@ -100,8 +100,8 @@ module.exports = {
 	* http://192.168.0.10:23456/entrance/light/on
 	* http://192.168.0.10:23456/all/light/on
 
-Macro APIs
-----------
+Macro API
+---------
 **Device API** を複雑に組み合わせた API になります。
 条件分岐などが発生する単純なリダイレクトでは制御できない内容を取り扱う API を定義しています。`./settings/macro-map.js` に一連のマクロを定義しており、`./settings/macro-map.js` に定義されています。
 例えば下記例では、1 秒おきに二度続けて同じ IR 信号を発信する例になります。
@@ -141,11 +141,12 @@ module.exports = [
 ];
 ```
 
-Voice Recognition
------------------
-音声認識に対応して何を行うかを `./settings/speech-map.js` に定義しています。
-また、音声認識結果に対する応答は、OpenJTalk によって音声合成された声で返ってきます。
-処理は `./speech.js` が行います。
+Word Recognition API
+--------------------
+自然言語に対する処理と応答を行います。
+
+* **http://192.168.0.4:23457/:word
+与えられた自然言語に対する処理を行います。ルールは、`./settings/word-map.js` にて定義しています。
 
 ```javascript
 module.exports = [
@@ -169,10 +170,22 @@ module.exports = [
 ];
 ```
 
+* **http://192.168.0.4:23457/status
+「認識停止」や「認識開始」で、内部の認識するか否かフラグを設定することが出来ます。`/status` ではこういった現在の状態について問い合わせることができます。
+
+
+Voice Recognition
+-----------------
+Julius を利用したルールベースの音声認識を利用して操作を行います。
+認識する言葉は *Word Recognition API* に依存します。
+処理は `./speech.js` が行い、音声認識結果に対する応答は、OpenJTalk によって音声合成された声で返ってきます。
+
+
 Twitter
 -------
-Twitter からの操作を `./twitter.js` で行っています。
-ここでは、入力を音声認識の代わりに Twitter での対象のアカウントに対してつぶやき、出力を OpenJTalk による発話の代わりに Twitter での返信にも対応しています。
+Twitter からの操作を `./twitter.js` で行います。
+当該アカウントがフォローしているユーザがコマンドを mention すると、それを実行しリプライで返信します。
+動作は *Word Recognition API* に依存します。
 
 
 TOOLs
