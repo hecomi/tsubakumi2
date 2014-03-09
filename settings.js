@@ -43,5 +43,8 @@ module.exports = {
 		ip   : '192.168.0.8',
 		user : secret.hue.user
 	},
-	twitter: secret.twitter
+	twitter: secret.twitter,
+	controller: {
+		port: port + 1
+	}
 };

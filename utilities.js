@@ -3,13 +3,16 @@ var http = require('http');
 http.globalAgent.maxSockets = 100;
 var timeout = 3000;
 
-// Request API
+// Device APIs
 // --------------------------------------------------------------------------------
-exports.get = function(api, callback) {
+exports.get = function(options, callback) {
+	if (!(options instanceof Object)) {
+		options = { path: options };
+	}
 	var req = http.get({
-		host : settings.host,
-		port : settings.port,
-		path : api
+		host : options.host || settings.host,
+		port : options.port || settings.port,
+		path : options.path
 	}, function(res) {
 		var json = '';
 		res.on('data', function(chunk) {
@@ -17,7 +20,11 @@ exports.get = function(api, callback) {
 		});
 		res.on('end', function(chunk) {
 			if (typeof(callback) === 'function') {
-				callback(JSON.parse(json));
+				try {
+					callback(JSON.parse(json));
+				} catch(e) {
+					callback({ error: e });
+				}
 			}
 			req.end();
 		});
@@ -32,6 +39,15 @@ exports.get = function(api, callback) {
 		throw err;
 	});
 	return req;
+};
+
+// query
+// --------------------------------------------------------------------------------
+exports.query = function(word, callback) {
+	return exports.get({
+		port: settings.controller.port,
+		path: '/' + word
+	}, callback);
 };
 
 // Timer
