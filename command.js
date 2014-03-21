@@ -5,11 +5,11 @@ var exec   = require('child_process').exec;
 var domain = require('domain');
 
 var scripts = [
-	'./device.js',
-	'./event.js',
-	'./controller.js',
-	'./speech.js',
-	'./twitter.js'
+	'device.js',
+	'event.js',
+	'controller.js',
+	'speech.js',
+	'twitter.js'
 ];
 
 var execScripts = function(command) {

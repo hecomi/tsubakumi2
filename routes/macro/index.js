@@ -1,4 +1,3 @@
-var request  = require('request');
 var printf   = require('printf');
 var _        = require('underscore');
 
@@ -10,9 +9,10 @@ var InvalidMacroError = function(msg) {
 
 module.exports = function(app) {
 	return function(req, res) {
-		for (var url in app.get('macroMap')) {
+		var macroMap = app.get('macroMap');
+		for (var url in macroMap) {
 			if (req.params[0] === url) {
-				app.get('macroMap')[url](req, res);
+				macroMap[url](req, res);
 				return;
 			}
 		}

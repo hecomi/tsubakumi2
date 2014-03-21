@@ -4,7 +4,7 @@ var printf     = require('printf');
 
 var get        = require('./utilities').get;
 var settings   = require('./settings.js');
-var speechMap  = require('./settings/speech-map.js');
+var speechMap  = require('./settings/word-map.js');
 var rules      = {};
 
 var twitter    = require('twitter');
@@ -35,8 +35,6 @@ speechMap.forEach(function(speech) {
 // ストリームをチェック
 bot.stream('user', function(stream) {
 	stream.on('data', function(data) {
-		console.log(data);
-
 		// フレンドリストの格納
 		if (data && data.friends) {
 			friends = data.friends;

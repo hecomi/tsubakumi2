@@ -15,16 +15,20 @@ module.exports = {
 	'projector/shutdown': function(req, res) {
 		_(2).times(function(n) {
 			setTimeout(function() {
-				var r = get('/projector/off');
-				if (n === 1) r.pipe(res);
+				var callback = (n === 1) ? function(result) {
+					res.jsonp(result);
+				} : undefined;
+				get('/projector/off', callback);
 			}, 1000 * n);
 		});
 	},
 	'projector/input/hdmi': function(req, res) {
 		['source', 'up', 'enter'].forEach(function(api, n) {
 			setTimeout(function() {
-				var r = get('/projector/' + api);
-				if (n === 2) r.pipe(res);
+				var callback = (api === 'enter') ? function(result) {
+					res.jsonp(result);
+				} : undefined;
+				get('/projector/' + api, callback);
 			}, 1000 * n);
 		});
 	},
@@ -38,8 +42,10 @@ module.exports = {
 		].forEach(function(api, n) {
 			console.log(api);
 			setTimeout(function() {
-				var r = get(api);
-				if (n === 4) r.pipe(res);
+				var callback = (api === '/ps3/○') ? function(result) {
+					res.jsonp(result);
+				} : undefined;
+				get(api, callback);
 			}, 500 * n);
 		});
 	}

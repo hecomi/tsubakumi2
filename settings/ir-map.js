@@ -29,7 +29,7 @@ module.exports = {
 	28 : 'appletv down',
 	29 : 'appletv enter',
 	30 : 'appletv menu',
-	31 : 'appletv play/pause',
+	31 : ['appletv play', 'appletv pause'],
 	32 : 'ps3 home',
 	33 : 'ps3 scan',
 	34 : 'ps3 top menu',

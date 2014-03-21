@@ -4,6 +4,6 @@ module.exports = function(err, req, res, next) {
 	console.error(err);
 	console.error('--------------------------------------------------------------------------------');
 	res.jsonp(500, {
-		error: err.toString()
+		error: err.stack
 	});
 };

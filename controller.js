@@ -6,13 +6,13 @@ var settings = require('./settings');
 
 // Rule
 // --------------------------------------------------------------------------------
-var wordMap   = require('./settings/word-map.js');
+var wordMap   = require('./settings/word-map');
 var rules       = {};
 var recognizing = true;
 
 // 認識開始 / 一時停止を登録
 wordMap.push({
-	word: '認識開始(して)?',
+	word: '(音声)?認識開始(して)?',
 	rule: {
 		recogStartRule: true,
 		func: function() {
@@ -28,7 +28,7 @@ wordMap.push({
 });
 
 wordMap.push({
-	word: ['(認識)?(一時)?停止(して)?', '(ちょっと)だまってて?'],
+	word: ['(認識)?(一時)?停止(して)?', '(ちょっと)?だまって(て)?'],
 	rule: {
 		func: function() {
 			if (!recognizing) {

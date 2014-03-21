@@ -1,4 +1,3 @@
-var settings = require('./settings');
 var http = require('http');
 http.globalAgent.maxSockets = 100;
 var timeout = 3000;
@@ -9,19 +8,20 @@ exports.get = function(options, callback) {
 	if (!(options instanceof Object)) {
 		options = { path: options };
 	}
+	var settings = require('./settings');
 	var req = http.get({
 		host : options.host || settings.host,
 		port : options.port || settings.port,
 		path : options.path
 	}, function(res) {
-		var json = '';
+		var chunks = [];
 		res.on('data', function(chunk) {
-			json += chunk.toString();
+			chunks.push(chunk);
 		});
 		res.on('end', function(chunk) {
 			if (typeof(callback) === 'function') {
 				try {
-					callback(JSON.parse(json));
+					callback(JSON.parse(chunks.join('')));
 				} catch(e) {
 					callback({ error: e });
 				}
@@ -44,6 +44,7 @@ exports.get = function(options, callback) {
 // query
 // --------------------------------------------------------------------------------
 exports.query = function(word, callback) {
+	var settings = require('./settings');
 	return exports.get({
 		port: settings.controller.port,
 		path: '/' + word

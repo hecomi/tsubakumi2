@@ -38,6 +38,16 @@ for (var i = 0; i < gomi.length; ++i) {
 	}
 }
 
+// 認識開始 / 一時停止を登録
+wordMap.push({
+	word: '音声認識開始(して)?',
+	rule: { /* dummy */ }
+});
+wordMap.push({
+	word: ['(音声認識)?一時停止', '(ちょっと)?だまってて'],
+	rule: { /* dummy */ }
+});
+
 // 音声認識の文法を登録
 wordMap.forEach(function(speech) {
 	if (!speech || !speech.word || !speech.rule) {
