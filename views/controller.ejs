@@ -5,8 +5,8 @@
 	<title>TSUBAKUMI CONTROLLER</title>
 </head>
 <body>
-	<% apis.forEach(function(api) { %>
-	<a href="<%= api.url %>"><%= api.name %></a>
-	<% } %>
+	<% words.forEach(function(word) { %>
+	<a href="/<%= word %>"><%= word %></a><br />
+	<% }); %>
 </body>
 </html>

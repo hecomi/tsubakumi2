@@ -21,6 +21,9 @@ module.exports = [
 					} else {
 						hallwayTimer.start(function() {
 							get('/hallway/light/off');
+							hallwayTimer.start(function() {
+								get('/hallway/light/off');
+							}, 5000);
 						}, 10000);
 					}
 				}

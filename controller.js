@@ -81,7 +81,9 @@ app.get('/status', function(req, res) {
 });
 
 app.get('/controller', function(req, res) {
-	res.render('controller', rules);
+	var words = _.chain(rules).keys().map(function(key) {
+	});
+	res.render('controller', {words : words});
 });
 
 app.get('/:word', function(req, res) {

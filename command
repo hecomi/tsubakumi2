@@ -1,26 +1,32 @@
-var shell  = require('shell');
-var app    = new shell();
-var printf = require('printf');
-var exec   = require('child_process').exec;
-var domain = require('domain');
+#!/Users/hecomi/.nodebrew/current/bin/node
+
+var shell    = require('shell');
+var app      = new shell();
+var printf   = require('printf');
+var exec     = require('child_process').exec;
+var domain   = require('domain');
+var settings = require('./settings');
 
 var scripts = [
 	'device.js',
 	'event.js',
 	'controller.js',
 	'speech.js',
-	'twitter.js'
+	'twitter.js',
+	'mail.js'
 ];
 
 var execScripts = function(command) {
 	var d = domain.create();
 	d.run(function() {
-		scripts.forEach(function(script) {
-			exec(printf(command, script), function(err, stdout, stderr) {
-				if (err) throw err;
-				console.log('stdout > %s', stdout);
-				console.error('stderr > %s', stderr);
-			});
+		scripts.forEach(function(script, index) {
+			setTimeout(function() {
+				exec(printf(command, script), function(err, stdout, stderr) {
+					if (err) throw err;
+					console.log('stdout > %s', stdout);
+					console.error('stderr > %s', stderr);
+				});
+			}, index * 1000);
 		});
 	});
 	d.on('error', function(err) {
@@ -39,21 +45,16 @@ app.configure(function() {
 });
 
 app.cmd('start', 'start all servers', function(req, res) {
-	execScripts('forever start %s');
+	execScripts(settings.command + ' start %s');
 	res.prompt();
 });
 
 app.cmd('restart', 'restart all servers', function(req, res) {
-	execScripts('forever restart %s');
+	execScripts(settings.command + ' restart %s');
 	res.prompt();
 });
 
 app.cmd('stop', 'stop all servers', function(req, res) {
-	execScripts('forever stop %s');
-	res.prompt();
-});
-
-app.cmd('debug', 'restart all servers', function(req, res) {
-	execScripts('forever start %s -w');
+	execScripts(settings.command + ' stop %s');
 	res.prompt();
 });

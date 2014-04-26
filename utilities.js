@@ -32,7 +32,7 @@ exports.get = function(options, callback) {
 	req.setTimeout(timeout);
 	req.on('timeout', function() {
 		req.abort();
-		throw new Error('TIMEOUT: ' + api, null);
+		throw new Error('TIMEOUT: ' + options.path, null);
 	});
 	req.on('error', function(err) {
 		req.abort();

@@ -8,6 +8,7 @@ module.exports = {
 	address  : 'http://' + ip.address() + ':' + port,
 	aliasMap : require('./settings/alias-map'),
 	macroMap : require('./settings/macro-map'),
+	command  : 'pm2',
 	DB: {
 		host        : 'localhost',
 		port        : 27017,
@@ -17,7 +18,7 @@ module.exports = {
 		}
 	},
 	iRemocon: {
-		ip    : '192.168.0.12',
+		ip    : '192.168.0.5',
 		irMap : require('./settings/ir-map'),
 		test  : {
 			checkIrNum : 999,  // テストする IR 番号
@@ -43,7 +44,8 @@ module.exports = {
 		ip   : '192.168.0.8',
 		user : secret.hue.user
 	},
-	twitter: secret.twitter,
+	twitter : secret.twitter,
+	gmail   : secret.gmail,
 	controller: {
 		port: port + 1
 	}
