@@ -2,8 +2,15 @@ var get   = require('../utilities').get;
 var Timer = require('../utilities').Timer;
 
 // Parameters
-var hallwayLightState = 1;
-var hallwayTimer = new Timer();
+var Hallway = {
+	lightState: 1,
+	lightTimer: new Timer()
+};
+var Aircon = {
+	State: { on: 0, off: 1 },
+	state: Aircon.State.off,
+	temperature: 0
+};
 
 // Rules
 module.exports = [
@@ -13,15 +20,15 @@ module.exports = [
 		func     : function() {
 			get('/entrance/motion', function(json) {
 				var newState = parseInt(json.state, 10);
-				if (newState !== hallwayLightState) {
-					hallwayLightState = newState;
-					if (hallwayLightState === 1) {
-						hallwayTimer.stop();
+				if (newState !== Hallway.lightState) {
+					Hallway.lightState = newState;
+					if (Hallway.lightState === 1) {
+						Hallway.lightTimer.stop();
 						get('/hallway/light/on');
 					} else {
-						hallwayTimer.start(function() {
+						Hallway.lightTimer.start(function() {
 							get('/hallway/light/off');
-							hallwayTimer.start(function() {
+							Hallway.lightTimer.start(function() {
 								get('/hallway/light/off');
 							}, 5000);
 						}, 10000);
@@ -29,5 +36,30 @@ module.exports = [
 				}
 			});
 		}
-	}
+	},
+	// {
+	// 	name     : 'aircon',
+	// 	interval : 1000 * 60 * 3, // 3 min
+	// 	func     : function() {
+	// 		get('/device/netatmo/room', function(json) {
+	// 			var temp = parseInt(json.temperature, 10);
+	// 			if (temp > 30) {
+	// 				get('/aircon/degree/26', function(json) {
+	// 					Aircon.temperature = 26;
+	// 				});
+	// 			}
+	// 			if (temp < 15) {
+	// 				get('/aircon/degree/20', function(json) {
+	// 					Aircon.temperature = 20;
+	// 				});
+	// 			}
+	// 			if (temp <= 26 && Aircon.temperature === 26) {
+	// 				get('/aircon/off');
+	// 			}
+	// 			if (temp >= 20 && Aircon.temperature === 20) {
+	// 				get('/aircon/off');
+	// 			}
+	// 		});
+	// 	}
+	// }
 ];
