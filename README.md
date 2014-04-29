@@ -3,7 +3,7 @@ TSUBAKUMI 2
 
 はじめに
 --------
-@hecomi 家の**ホームコントロールシステム**の２世代目です。iRemocon、WeMo、hue などの各種ガジェットの機能を WebAPI 化し、そこから操作できる機器や動作の組み合わせを更に WebAPI 化しています。これにより、他のガジェット（PCやスマホ、Pebble など）から一通りの家電操作を可能とするシステムとなっています。
+@hecomi 家の**ホームコントロールシステム**の２世代目です。iRemocon、WeMo、hue、Netatmo などの各種ガジェットの機能を WebAPI 化し、そこから操作できる機器や動作の組み合わせを更に WebAPI 化しています。これにより、他のガジェット（PCやスマホ、Pebble など）から一通りの家電操作を可能とするシステムとなっています。
 例えば、以下の様な URL を叩くと家電を操作することが出来ます。
 
 * http://192.168.0.10:23456/projector/on
@@ -55,6 +55,12 @@ Device API
 		* http://192.168.0.10:23456/device/hue/alert/3
 	* TODO
 		* 機器番号は機器名でも可能にする
+
+* **/device/netatmo/:api**
+	* `:api` は室内情報の `room` と、室外情報の `outside` を指定します。
+	* 使用例
+		* http://192.168.0.10:23456/netatmo/room
+		* http://192.168.0.10:23456/netatmo/outside
 
 IR MAP
 ------
@@ -122,6 +128,9 @@ module.exports = function(app) {
 	};
 };
 ```
+
+Service API
+-----------
 
 Event
 -----
@@ -191,7 +200,12 @@ Twitter からの操作を `./twitter.js` で行います。
 Gmail
 -----
 Gmail での着信を `./mail.js` で行います。
-コマンド（自然言語）を記述したタイトルを見て、それを実行します。これを通じて IFTTT と連携しています。
+コマンド（自然言語）を記述したタイトルを見て、それを実行します。
+
+
+IFTTT
+-----
+IFTTT のアクションを Gamil でのメール送信とすれば、上述の Gmail 連携機能で IFTTT のトリガと結びつけることが出来ます。例えばスマホの位置に連動して電気の ON/OFF などが可能です。
 
 
 TOOLs
