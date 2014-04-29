@@ -21,7 +21,8 @@ module.exports = function(app) {
 						humidity    : val[1],
 						pressure    : val[2],
 						noise       : val[3],
-						co2         : val[4]
+						co2         : val[4],
+						raw			: result
 					});
 				});
 			});
@@ -44,7 +45,8 @@ module.exports = function(app) {
 					res.jsonp({
 						timestamp   : timestamp,
 						temperature : val[0],
-						humidity    : val[1]
+						humidity    : val[1],
+						raw			: result
 					});
 				});
 			});
