@@ -1,3 +1,6 @@
+var request = require('request');
+var printf  = require('printf');
+
 module.exports = [
 	{
 		word: [
@@ -11,8 +14,26 @@ module.exports = [
 	{
 		word: '(明日の|今日の)?天気(教えて)?',
 		rule: {
-			func: function(str) {
-				return str + 'だって？、ググれカス！';
+			async: true,
+			func: function(str, res) {
+				console.log(res);
+				var url = 'http://weather.livedoor.com/forecast/webservice/json/v1?city=130010';
+				request.get({url: url, json: true}, function(err, response, json) {
+					if (err) throw err;
+					var time = '今日', index = 0;
+					if ( str.indexOf('明日') !== -1 ) {
+						time  = '明日';
+						index = 1;
+					}
+					var forecast = json.forecasts[index];
+					var weather = forecast.telop;
+					var min = forecast.temperature.min ?
+						printf('、最低気温は%s度', forecast.temperature.min.celsius) : '';
+					var max     = forecast.temperature.max ?
+						printf('、最低気温は%s度', forecast.temperature.max.celsius) : '';
+					var reply = printf('%sの天気は%s%s%sです。', time, weather, min, max);
+					res.jsonp({ reply: reply });
+				});
 			}
 		}
 	},

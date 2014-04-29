@@ -112,17 +112,26 @@ app.get('/:word', function(req, res) {
 				console.log('  ==>', rule.reply);
 				reply = rule.reply;
 			}
-			if (rule.func)  {
-				console.log('  ==> func');
-				var word = rule.func(req.params.word);
-				if (word) reply = word;
-			}
 			if (rule.api) {
 				console.log('  ==>', rule.api);
 				var apis = (rule.api instanceof Array) ? rule.api : [rule.api];
 				apis.forEach(get);
 			}
-			res.jsonp({ reply: reply });
+			if (rule.async) {
+				if (rule.func)  {
+					console.log('  ==> func (asnyc)');
+					rule.func(req.params.word, res);
+				} else {
+					throw new Error('Rule map is something wrong');
+				}
+			} else {
+				if (rule.func) {
+					console.log('  ==> func');
+					var word = rule.func(req.params.word);
+					if (word) reply = word;
+				}
+				res.jsonp({ reply: reply });
+			}
 		}
 	});
 	if (!matched) {
