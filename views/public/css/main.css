@@ -1,0 +1,81 @@
+* {
+	margin: 0px;
+	padding: 0px;
+}
+
+body {
+	background: #000;
+	color: #fff;
+	font-size: 1em;
+}
+
+p.api {
+	width: 100%;
+	color: #fff;
+	text-decoration: none;
+	border-bottom: 1px #444 dotted;
+	padding: 0.4em 0px 0.4em 1em;
+}
+
+p.api:nth-child(even) {
+	background: #222;
+}
+
+p.api:hover {
+	color: #eee;
+	text-decoration: underline;
+	cursor: pointer;
+	background: #444;
+}
+
+p.api:active {
+	color: #eee;
+	background: #484;
+}
+
+#notification {
+	width: 100%;
+	position: fixed;
+	left: 0px;
+	top: 0px;
+}
+
+#notification p {
+	width: 100%;
+	padding: 0.4em;
+}
+
+#notification p:before {
+	font-weight: bold;
+	padding-right: 10px;
+}
+
+#notification p.success {
+	background: #052;
+	border-bottom: 1px #3a7 dotted;
+	color: #cfc;
+}
+
+#notification p.success:before {
+	content: '[SUCCESS]';
+}
+
+#notification p.info {
+	background: #035;
+	border-bottom: 1px #37a dotted;
+	color: #ccf;
+}
+
+#notification p.info:before {
+	content: '[INFO]';
+}
+
+#notification p.error {
+	background: #510;
+	border-bottom: 1px #a73 dotted;
+	color: #f88;
+}
+
+#notification p.error:before {
+	content: '[ERROR]';
+}

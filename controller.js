@@ -62,6 +62,8 @@ for (var key in settings) {
 // ejs
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
+app.use(express.static(__dirname + '/bower_components'));
+app.use(express.static(__dirname + '/views/public'));
 
 // Middlewares
 // --------------------------------------------------------------------------------
@@ -81,9 +83,19 @@ app.get('/status', function(req, res) {
 });
 
 app.get('/controller', function(req, res) {
-	var words = _.chain(rules).keys().map(function(key) {
+	var words = _.chain(rules).keys().map(function(word) {
+		return word.replace(/\?/g, '').replace(
+			/\(([^|)]+).*?\)/g, function() { return RegExp.$1; });
 	});
 	res.render('controller', {words : words});
+});
+
+app.get('/apis', function(req, res) {
+	var words = _.chain(rules).keys().map(function(word) {
+		return word.replace(/\?/g, '').replace(
+			/\(([^|)]+).*?\)/g, function() { return RegExp.$1; });
+	}).value();
+	res.jsonp({ apis: words });
 });
 
 app.get('/:word', function(req, res) {

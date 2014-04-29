@@ -1,12 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
 	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0" />
+	<script src="/jquery/dist/jquery.min.js"></script>
+	<script src="/js/main.js"></script>
+	<link rel="stylesheet" href="/css/main.css">
 	<title>TSUBAKUMI CONTROLLER</title>
 </head>
 <body>
-	<% words.forEach(function(word) { %>
-	<a href="/<%= word %>"><%= word %></a><br />
-	<% }); %>
+	<div id="container">
+		<div id="apis"></div>
+		<div id="notification"></div>
+	</div>
 </body>
 </html>
