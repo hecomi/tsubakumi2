@@ -9,6 +9,19 @@ body {
 	font-size: 1em;
 }
 
+h1 {
+	width: 100%;
+	text-align: center;
+	background: #333;
+	border-bottom: 2px #666 solid;
+}
+
+h2 {
+	margin: 20px 0px 10px 0px;
+	padding-left: 10px;
+	border-bottom: 1px #666 solid;
+}
+
 p.api {
 	width: 100%;
 	color: #fff;
@@ -33,11 +46,34 @@ p.api:active {
 	background: #484;
 }
 
+#netatmo {
+}
+
+#room, #outside {
+	padding: 5px;
+	background: #000;
+	border-bottom: 1px #555 dotted;
+}
+
+#room span.title, #outside span.title {
+	font-weight: bold;
+	margin-right: 1em;
+}
+
+#room span.key, #outside span.key {
+	font-weight: bold;
+	margin-right: 0.3em;
+}
+
+#room span.value, #outside span.value {
+	margin-right: 1em;
+}
+
 #notification {
 	width: 100%;
 	position: fixed;
 	left: 0px;
-	top: 0px;
+	bottom: 0px;
 }
 
 #notification p {
