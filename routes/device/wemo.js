@@ -22,11 +22,20 @@ var WeMoHandler = function(target) {
 	this.target = target;
 	this.name   = target.name;
 	this.wemo   = null;
+	this.isSearching = false;
 };
 
 WeMoHandler.prototype = {
 	search: function(callback) {
+		if (this.isSearching) {
+			if (typeof(callback) === 'function') {
+				callback('Already searching...');
+			}
+			return;
+		}
+		this.isSearching = true;
 		WeMo.Search(this.name, function(err, device) {
+			this.isSearching = false;
 			if (err) throw err;
 			this.ip   = device.ip;
 			this.port = device.port;
@@ -43,7 +52,8 @@ WeMoHandler.prototype = {
 	},
 	state: function(callback) {
 		var self = this;
-		this._callApi(function() {
+		this._callApi(function(err) {
+			if (err) throw err;
 			self.wemo.getBinaryState(function(err, result) {
 				if (err) {
 					self.search(callback);
@@ -55,7 +65,8 @@ WeMoHandler.prototype = {
 	},
 	on: function(callback) {
 		var self = this;
-		this._callApi(function() {
+		this._callApi(function(err) {
+			if (err) throw err;
 			self.wemo.setBinaryState(1, function(err, result) {
 				if (err) {
 					self.search(callback);
@@ -67,7 +78,8 @@ WeMoHandler.prototype = {
 	},
 	off: function(callback) {
 		var self = this;
-		this._callApi(function() {
+		this._callApi(function(err) {
+			if (err) throw err;
 			self.wemo.setBinaryState(0, function(err, result) {
 				if (err) {
 					self.search(callback);
@@ -86,8 +98,11 @@ module.exports = function(app) {
 			if (!(target in app.get('WeMo').switches)) {
 				throw new InvalidArgumentsError(target + ' is not registered as WeMo Switch device');
 			}
+
 			var target = app.get('WeMo').switches[target];
-			var wemo = target.handler = target.handler || new WeMoHandler(target);
+			target.handler = target.handler || new WeMoHandler(target);
+			var wemo = target.handler;
+
 			switch (req.params.api) {
 				case 'state':
 					wemo.state(function(err,result) {
@@ -117,8 +132,16 @@ module.exports = function(app) {
 			if (!(target in app.get('WeMo').motions)) {
 				throw new InvalidArgumentsError(target + ' is not registered as WeMo Switch device');
 			}
+
+			console.log('---');
+			console.log(target);
+			console.log('---');
 			var target = app.get('WeMo').motions[target];
-			var wemo = target.handler = target.handler || new WeMoHandler(target);
+			console.log(target);
+			console.log('---');
+			target.handler = target.handler || new WeMoHandler(target);
+			var wemo = target.handler;
+
 			switch (req.params.api) {
 				case 'state':
 					wemo.state(function(err,result) {
