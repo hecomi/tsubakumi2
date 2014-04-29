@@ -7,8 +7,6 @@ var Hallway = {
 	lightTimer: new Timer()
 };
 var Aircon = {
-	State: { on: 0, off: 1 },
-	state: Aircon.State.off,
 	temperature: 0
 };
 

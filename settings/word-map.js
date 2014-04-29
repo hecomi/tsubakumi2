@@ -30,7 +30,7 @@ module.exports = [
 					var min = forecast.temperature.min ?
 						printf('、最低気温は%s度', forecast.temperature.min.celsius) : '';
 					var max     = forecast.temperature.max ?
-						printf('、最低気温は%s度', forecast.temperature.max.celsius) : '';
+						printf('、最高気温は%s度', forecast.temperature.max.celsius) : '';
 					var reply = printf('%sの天気は%s%s%sです。', time, weather, min, max);
 					res.jsonp({ reply: reply });
 				});
@@ -229,7 +229,7 @@ module.exports = [
 		}
 	},
 	{
-		word: 'プロジェクタで?エッチディーエムアイ(を表示)?',
+		word: 'プロジェクタで?エッチディーエムアイを?表示',
 		rule: {
 			reply: 'エッチディーエムアイを表示します',
 			api: '/projector/input/hdmi'
