@@ -37,6 +37,9 @@ app.get('/device/hue/:api/:arg1', routes.device.hue);
 app.get('/device/hue/:api/:arg1/:arg2', routes.device.hue);
 app.get('/device/hue/:api/:arg1/:arg2/:arg3', routes.device.hue);
 
+// device
+app.get('/device/netatmo/:api', routes.device.netatmo);
+
 // Macro APIs
 // --------------------------------------------------------------------------------
 app.get('/macro/*', routes.macro);

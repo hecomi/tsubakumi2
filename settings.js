@@ -2,6 +2,7 @@ var ip     = require('ip');
 var secret = require('./settings/settings.secret');
 
 var port = process.env.PORT || 23456;
+
 module.exports = {
 	port     : port,
 	host     : ip.address(),
@@ -44,6 +45,7 @@ module.exports = {
 		ip   : '192.168.0.8',
 		user : secret.hue.user
 	},
+	netatmo : secret.netatmo,
 	twitter : secret.twitter,
 	gmail   : secret.gmail,
 	controller: {
