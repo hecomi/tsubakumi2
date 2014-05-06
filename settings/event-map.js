@@ -7,14 +7,14 @@ var Hallway = {
 	lightState    : 1,
 	lightTimer    : new Timer(),
 	checkInterval : 1000,
-	onDuration    : 10000
+	onDuration    : 30000
 };
 
 var Toilet = {
 	lightState    : 1,
 	lightTimer    : new Timer(),
 	checkInterval : 1000,
-	onDuration    : 3000
+	onDuration    : 30000
 };
 
 var Aircon = {
@@ -30,12 +30,17 @@ module.exports = [
 		func     : function() {
 			var onDetectMove = function() {
 				Hallway.lightTimer.stop();
-				get('/hallway/light/on');
+				get('/hallway/light/on', function() {
+					get('/hallway/light/brightness/100');
+				});
 			};
 			var onLostMove = function() {
 				Hallway.lightTimer.start(function() {
-					get('/hallway/light/off');
-				}, Hallway.onDuration);
+					get('/hallway/light/brightness/50');
+					Hallway.lightTimer.start(function() {
+						get('/hallway/light/off');
+					}, Hallway.onDuration / 2);
+				}, Hallway.onDuration / 2);
 			};
 
 			get('/entrance/motion', function(json) {
@@ -60,12 +65,17 @@ module.exports = [
 
 				var onDetectMove = function() {
 					Toilet.lightTimer.stop();
-					get('/toilet/light/on');
+					get('/toilet/light/on', function() {
+						get('/hallway/light/brightness/100');
+					});
 				};
 				var onLostMove = function() {
 					Toilet.lightTimer.start(function() {
-						get('/toilet/light/off');
-					}, Toilet.onDuration);
+						get('/toilet/light/brightness/50');
+						Toilet.lightTimer.start(function() {
+							get('/toilet/light/off');
+						}, Toilet.onDuration / 2);
+					}, Toilet.onDuration / 2);
 				};
 
 				var newState = parseInt(json.results[0].result.state, 10);
