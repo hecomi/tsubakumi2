@@ -98,6 +98,17 @@ app.get('/apis', function(req, res) {
 	res.jsonp({ apis: words });
 });
 
+app.get('/apis/pebble', function(req, res) {
+	var apis = [];
+	_.each(rules, function(rule) {
+		console.log(rule);
+		if (rule.api && !(rule.api instanceof Array)) {
+			apis.push(rule.api);
+		}
+	});
+	res.jsonp({ apis: apis });
+});
+
 app.get('/:word', function(req, res) {
 	var matched = false;
 	_.each(rules, function(rule, key) {

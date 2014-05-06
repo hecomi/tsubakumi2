@@ -1,4 +1,4 @@
-var WeMo = require('wemo');
+var WeMo   = require('wemo');
 
 var WeMoNotFoundError = function(ip, port) {
 	var e = new Error('WeMo@' + ip + ':' + port + ' is not found');
@@ -27,65 +27,60 @@ var WeMoHandler = function(target) {
 
 WeMoHandler.prototype = {
 	search: function(callback) {
-		if (this.isSearching) {
-			if (typeof(callback) === 'function') {
-				callback('Already searching...');
-			}
+		if (!this.isSearching && this.wemo !== null) {
+			callback();
 			return;
 		}
-		this.isSearching = true;
-		WeMo.Search(this.name, function(err, device) {
-			this.isSearching = false;
-			if (err) throw err;
-			this.ip   = device.ip;
-			this.port = device.port;
-			this.wemo = new WeMo(this.ip, this.port);
-			if (typeof(callback) === 'function') callback();
-		}.bind(this));
-	},
-	_callApi: function(api) {
-		if (this.wemo === null) {
-			this.search(api);
-		} else {
-			api();
+		if (!this.isSearching && this.wemo === null) {
+			this.isSearching = true;
+			WeMo.Search(this.name, function(err, device) {
+				this.isSearching = false;
+				if (err) return;
+				this.ip   = device.ip;
+				this.port = device.port;
+				this.wemo = new WeMo(this.ip, this.port);
+			}.bind(this));
+		}
+		if (typeof(callback) === 'function') {
+			callback(new Error(this.name + ' has not been found yet'));
 		}
 	},
 	state: function(callback) {
 		var self = this;
-		this._callApi(function(err) {
-			if (err) throw err;
+		this.search(function(err) {
+			if (err) {
+				callback(err);
+				return;
+			}
 			self.wemo.getBinaryState(function(err, result) {
-				if (err) {
-					self.search(callback);
-					throw err;
-				}
-				callback(null, result);
+				if (err) { self.wemo = null; }
+				callback(err, result);
 			});
 		});
 	},
 	on: function(callback) {
 		var self = this;
-		this._callApi(function(err) {
-			if (err) throw err;
+		this.search(function(err) {
+			if (err) {
+				callback(err);
+				return;
+			}
 			self.wemo.setBinaryState(1, function(err, result) {
-				if (err) {
-					self.search(callback);
-					throw err;
-				}
-				callback(null, result);
+				if (err) { self.wemo = null; }
+				callback(err, result);
 			});
 		});
 	},
 	off: function(callback) {
 		var self = this;
-		this._callApi(function(err) {
-			if (err) throw err;
+		this.search(function(err) {
+			if (err) {
+				callback(err);
+				return;
+			}
 			self.wemo.setBinaryState(0, function(err, result) {
-				if (err) {
-					self.search(callback);
-					throw err;
-				}
-				callback(null, result);
+				if (err) { self.wemo = null; }
+				callback(err, result);
 			});
 		});
 	}
@@ -129,16 +124,12 @@ module.exports = function(app) {
 
 		motions: function(req, res) {
 			var target = req.params.target;
+
 			if (!(target in app.get('WeMo').motions)) {
 				throw new InvalidArgumentsError(target + ' is not registered as WeMo Switch device');
 			}
 
-			console.log('---');
-			console.log(target);
-			console.log('---');
 			var target = app.get('WeMo').motions[target];
-			console.log(target);
-			console.log('---');
 			target.handler = target.handler || new WeMoHandler(target);
 			var wemo = target.handler;
 

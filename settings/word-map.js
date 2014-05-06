@@ -24,8 +24,7 @@ module.exports = [
 					if ( str.indexOf('明日') !== -1 ) {
 						time  = '明日';
 						index = 1;
-					}
-					var forecast = json.forecasts[index];
+					}					var forecast = json.forecasts[index];
 					var weather = forecast.telop;
 					var min = forecast.temperature.min ?
 						printf('、最低気温は%s度', forecast.temperature.min.celsius) : '';
@@ -229,7 +228,7 @@ module.exports = [
 		}
 	},
 	{
-		word: 'プロジェクタで?エッチディーエムアイを?表示',
+		word: 'プロジェクタエッチディーエムアイを?表示',
 		rule: {
 			reply: 'エッチディーエムアイを表示します',
 			api: '/projector/input/hdmi'

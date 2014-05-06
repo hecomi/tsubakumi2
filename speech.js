@@ -62,8 +62,8 @@ grammar.compile(function(err, result) {
 	if (err) throw err;
 
 	var julius = new Julius( grammar.getJconf() );
-	grammar.deleteFiles();
 	julius.start();
+	grammar.deleteFiles();
 
 	// 応答を登録
 	julius.on('result', function(str) {
