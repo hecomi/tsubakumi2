@@ -2,34 +2,79 @@ var get   = require('../utilities').get;
 var Timer = require('../utilities').Timer;
 
 // Parameters
+// --------------------------------------------------------------------------------
 var Hallway = {
-	lightState: 1,
-	lightTimer: new Timer()
+	lightState    : 1,
+	lightTimer    : new Timer(),
+	checkInterval : 1000,
+	onDuration    : 10000
 };
+
+var Toilet = {
+	lightState    : 1,
+	lightTimer    : new Timer(),
+	checkInterval : 1000,
+	onDuration    : 3000
+};
+
 var Aircon = {
 	temperature: 0
 };
 
 // Rules
+// --------------------------------------------------------------------------------
 module.exports = [
 	{
 		name     : 'hallway light',
-		interval : 3000,
+		interval : Hallway.checkInterval,
 		func     : function() {
+			var onDetectMove = function() {
+				Hallway.lightTimer.stop();
+				get('/hallway/light/on');
+			};
+			var onLostMove = function() {
+				Hallway.lightTimer.start(function() {
+					get('/hallway/light/off');
+				}, Hallway.onDuration);
+			};
+
 			get('/entrance/motion', function(json) {
-				var newState = parseInt(json.state, 10);
+				var newState = parseInt(json.results[0].result.state, 10);
 				if (newState !== Hallway.lightState) {
 					Hallway.lightState = newState;
-					if (Hallway.lightState === 1) {
-						Hallway.lightTimer.stop();
-						get('/hallway/light/on');
+					if (newState === 1) {
+						onDetectMove();
 					} else {
-						Hallway.lightTimer.start(function() {
-							get('/hallway/light/off');
-							Hallway.lightTimer.start(function() {
-								get('/hallway/light/off');
-							}, 5000);
-						}, 10000);
+						onLostMove();
+					}
+				}
+			});
+		}
+	},
+	{
+		name     : 'toilet light',
+		interval : Toilet.checkInterval,
+		func     : function() {
+			get('/toilet/motion', function(json) {
+				if (json.error) throw json.error;
+
+				var onDetectMove = function() {
+					Toilet.lightTimer.stop();
+					get('/toilet/light/on');
+				};
+				var onLostMove = function() {
+					Toilet.lightTimer.start(function() {
+						get('/toilet/light/off');
+					}, Toilet.onDuration);
+				};
+
+				var newState = parseInt(json.results[0].result.state, 10);
+				if (newState !== Toilet.lightState) {
+					Toilet.lightState = newState;
+					if (newState === 1) {
+						onDetectMove();
+					} else {
+						onLostMove();
 					}
 				}
 			});

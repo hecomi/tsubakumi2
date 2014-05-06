@@ -33,6 +33,7 @@ module.exports = {
 
 	// wemo
 	'/entrance/motion' : '/device/wemo/motion/entrance/state',
+	'/toilet/motion'   : '/device/wemo/motion/toilet/state',
 
 	// ps3
 	'/ps3/torne' : '/macro/ps3/torne'
