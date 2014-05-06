@@ -1,6 +1,6 @@
-var _        = require('underscore');
-var request  = require('request');
-var get      = require('../utilities').get;
+var _    = require('underscore');
+var get  = require('../utilities').get;
+var util = require('util');
 
 module.exports = function(app) {
 
@@ -10,20 +10,23 @@ module.exports = function(app) {
 		var aliasMap = app.get('aliasMap');
 
 		_.keys(aliasMap).forEach(function(api) {
-			if (url === api) {
+			if ( url.match(new RegExp(api)) ) {
+				var args = [RegExp.$1, RegExp.$2, RegExp.$3];
 				endFlag = true;
-				var alias = aliasMap[api] instanceof Array ? aliasMap[api] : [ aliasMap[api] ];
+				var aliases = aliasMap[api] instanceof Array ? aliasMap[api] : [ aliasMap[api] ];
 				var results = [];
-				alias.forEach(function(url) {
-					get(url, function(json) {
+				aliases.forEach(function(alias) {
+					alias = util.format(alias, args[0], args[1], args[2]);
+					get(alias, function(json) {
 						results.push({
-							url    : url,
+							url    : alias,
 							result : json
 						});
-						if (results.length === alias.length) {
+						if (results.length === aliases.length) {
 							res.jsonp({
 								type    : 'alias',
-								alias   : alias,
+								url     : url,
+								alias   : aliases,
 								results : results
 							});
 						}
@@ -65,6 +68,6 @@ module.exports = function(app) {
 		if (aliasMapHandler(req, res)) return;
 		if (iRemoconHandler(req, res)) return;
 
-		request.get(app.get('address') + '/404').pipe(res);
+		get('/404', function(json) { res.jsonp(json); });
 	};
 };

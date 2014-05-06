@@ -24,8 +24,15 @@ module.exports = {
 	'/lavatory/light/off' : '/device/hue/off/5',
 	'/hallway/light/on'   : ['/entrance/light/on', '/kitchen/light/on'],
 	'/hallway/light/off'  : ['/entrance/light/off', '/kitchen/light/off'],
-	'/all/light/on'       : ['/hallway/light/on', '/room/light/on'],
-	'/all/light/off'      : ['/hallway/light/off', '/room/light/off'],
+	'/all/light/on'       : ['/hallway/light/on', '/room/light/on', '/toilet/light/on', '/lavatory/light/on'],
+	'/all/light/off'      : ['/hallway/light/off', '/room/light/off', '/toilet/light/off', '/lavatory/light/off'],
+
+	'/entrance/light/([^/]*)/(.*)$' : '/device/hue/%s/1/%s',
+	'/kitchen/light/([^/]*)/(.*)$'  : ['/device/hue/%s/2/%s', '/device/hue/%s/3/%s'],
+	'/hallway/light/([^/]*)/(.*)$'  : ['/entrance/light/%s/%s', '/kitchen/light/%s/%s'],
+	'/toilet/light/([^/]*)/(.*)$'   : '/device/hue/%s/4/%s',
+	'/lavatory/light/([^/]*)/(.*)$' : '/device/hue/%s/5/%s',
+	'/all/light/([^/]*)/(.*)$'      : ['/hallway/light/%s/%s', '/toilet/light/%s/%s', '/lavatory/light/%s/%s'],
 
 	// projector
 	'/projector/shutdown'   : '/macro/projector/shutdown',
