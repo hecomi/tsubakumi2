@@ -37,6 +37,9 @@ module.exports = {
 		motions : {
 			entrance: {
 				name: 'Hecomi WeMo Motion 1'
+			},
+			toilet: {
+				name: 'Hecomi WeMo Motion 2'
 			}
 		}
 	},

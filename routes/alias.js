@@ -1,52 +1,69 @@
 var _        = require('underscore');
 var request  = require('request');
+var get      = require('../utilities').get;
 
 module.exports = function(app) {
-	return function(req, res) {
+
+	var aliasMapHandler = function(req, res) {
+		var url = req.params[0];
+		var endFlag = false;
+		var aliasMap = app.get('aliasMap');
+
+		_.keys(aliasMap).forEach(function(api) {
+			if (url === api) {
+				endFlag = true;
+				var alias = aliasMap[api] instanceof Array ? aliasMap[api] : [ aliasMap[api] ];
+				var results = [];
+				alias.forEach(function(url) {
+					get(url, function(json) {
+						results.push({
+							url    : url,
+							result : json
+						});
+						if (results.length === alias.length) {
+							res.jsonp({
+								type    : 'alias',
+								alias   : alias,
+								results : results
+							});
+						}
+					});
+				});
+			}
+		});
+
+		return endFlag;
+	};
+
+	var iRemoconHandler = function(req, res) {
 		var url = req.params[0];
 		var endFlag = false;
 
-		// From reirect-map.js
-		var redirectMap = app.get('aliasMap');
-		_.keys(redirectMap).forEach(function(api) {
-			if (url === api) {
-				endFlag = true;
-				if (typeof(redirectMap[api]) === 'string') {
-					var redirect = app.get('address') + redirectMap[api];
-					request.get(redirect).pipe(res);
-				} else {
-					var results = [];
-					redirectMap[api].forEach(function(url) {
-						var redirect = app.get('address') + url;
-						request.get({url: redirect, json: true}, function(err, result, json) {
-							if (err) throw err;
-							results.push({
-								api    : url,
-								result : json
-							});
-							if (results.length === redirectMap[api].length) {
-								console.log(results);
-								res.jsonp({ results: results });
-							}
-						});
-					});
-				}
-			}
-		});
-		if (endFlag) return;
-
-		// iRemocon
 		_.chain(app.get('iRemocon').irMap).invert().keys().each(function(keys) {
 			keys.split(',').forEach(function(key) {
 				var api = '/' + key.replace(/\s/g, '/');
 				if (url.match(api) && !endFlag) {
 					endFlag = true;
-					var redirect = app.get('address') + '/device/iremocon/is' + url;
-					request.get(redirect).pipe(res);
+					get('/device/iremocon/is' + url, function(json) {
+						res.jsonp({
+							url    : url,
+							alias  : '/device/iremocon/is' + url,
+							type   : 'alias-iRemocon',
+							result : json
+						});
+					});
 				}
 			});
 		});
-		if (endFlag) return;
+
+		return endFlag;
+	};
+
+	return function(req, res) {
+		var endFlag = false;
+
+		if (aliasMapHandler(req, res)) return;
+		if (iRemoconHandler(req, res)) return;
 
 		request.get(app.get('address') + '/404').pipe(res);
 	};
