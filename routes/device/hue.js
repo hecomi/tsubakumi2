@@ -1,6 +1,7 @@
-var hue        = require("node-hue-api");
-var HueApi     = hue.HueApi;
-var lightState = hue.lightState;
+var hue         = require("node-hue-api");
+var HueApi      = hue.HueApi;
+var lightState  = hue.lightState;
+var lightStates = [];
 
 var InvalidApiError = function(msg) {
 	var e = new Error(msg);
@@ -29,9 +30,11 @@ module.exports = function(app) {
 			}
 		};
 
-		var arg1 = req.params.arg1;
-		var arg2 = req.params.arg2;
-		var arg3 = req.params.arg3;
+		var arg1  = req.params.arg1;
+		var arg2  = req.params.arg2;
+		var arg3  = req.params.arg3;
+		var state = lightStates[arg1] || (lightStates[arg1] = lightState.create());
+
 		switch (req.params.api) {
 			// TODO: implement all hue apis
 			case 'lights':
@@ -48,53 +51,52 @@ module.exports = function(app) {
 				break;
 			case 'on':
 				if (!arg1) throw InvalidApiError('"on" needs at least one parameter');
-				var state = lightState.create().on();
+				state.on();
 				if (arg2) state.transition(arg2);
 				callHueApi('setLightState', arg1, state);
 				break;
 			case 'off':
 				if (!arg1) throw InvalidApiError('"off" needs at least one parameter');
-				var state = lightState.create().off();
+				state.off();
 				if (arg2) state.transition(arg2);
 				callHueApi('setLightState', arg1, state);
 				break;
 			case 'rgb':
 				if (!arg1 || !arg2) throw InvalidApiError('"rgb" needs at least two parameters');
 				var rgb = arg2.split(',');
-				var state = lightState.create().rgb(rgb[0], rgb[1], rgb[2]);
+				state.rgb(rgb[0], rgb[1], rgb[2]);
 				if (arg3) state.transition(arg3);
 				callHueApi('setLightState', arg1, state);
 				break;
 			case 'hsl':
 				if (!arg1 || !arg2) throw InvalidApiError('"hsl" needs at least two parameters');
 				var hsl = arg2.split(',');
-				var state = lightState.create().hsl(hsl[0], hsl[1], hsl[2]);
+				state.hsl(hsl[0], hsl[1], hsl[2]);
 				if (arg3) state.transition(arg3);
 				callHueApi('setLightState', arg1, state);
 				break;
 			case 'xy':
 				if (!arg1 || !arg2) throw InvalidApiError('"xy" needs at least two parameters');
 				var xy = arg2.split(',');
-				var state = lightState.create().xy(xy[0], xy[1]);
+				state.xy(xy[0], xy[1]);
 				if (arg3) state.transition(arg3);
 				callHueApi('setLightState', arg1, state);
 				break;
 			case 'white':
 				if (!arg1 || !arg2) throw InvalidApiError('"white" needs at least two parameters');
 				var white = arg2.split(',');
-				var state = lightState.create().white(white[0], white[1]);
+				state.white(white[0], white[1]);
 				if (arg3) state.transition(arg3);
 				callHueApi('setLightState', arg1, state);
 				break;
 			case 'brightness':
 				if (!arg1 || !arg2) throw InvalidApiError('"white" needs at least two parameters');
-				var state = lightState.create().brightness(arg2);
+				state.brightness(parseInt(arg2));
 				if (arg3) state.transition(arg3);
 				callHueApi('setLightState', arg1, state);
 				break;
 			case 'alert':
 				if (!arg1) throw InvalidApiError('"white" needs at least two parameters');
-				var state = lightState.create();
 				if (arg2) { state.alert(arg2); }
 				else      { state.alert();     }
 				callHueApi('setLightState', arg1, state);

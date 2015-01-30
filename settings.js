@@ -45,7 +45,7 @@ module.exports = {
 	},
 	hue: {
 		id   : '001788fffe15ccd4',
-		ip   : '192.168.0.8',
+		ip   : '192.168.0.6',
 		user : secret.hue.user
 	},
 	netatmo : secret.netatmo,

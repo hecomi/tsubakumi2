@@ -6,15 +6,15 @@ var Timer = require('../utilities').Timer;
 var Hallway = {
 	lightState    : 1,
 	lightTimer    : new Timer(),
-	checkInterval : 1000,
-	onDuration    : 30000
+	checkInterval : 1,
+	onDuration    : 30
 };
 
 var Toilet = {
 	lightState    : 1,
 	lightTimer    : new Timer(),
-	checkInterval : 1000,
-	onDuration    : 30000
+	checkInterval : 1,
+	onDuration    : 60
 };
 
 var Aircon = {
@@ -27,25 +27,28 @@ module.exports = [
 	{
 		name     : 'hallway light',
 		interval : Hallway.checkInterval,
+		count    : 0,
 		func     : function() {
 			var onDetectMove = function() {
 				Hallway.lightTimer.stop();
 				get('/hallway/light/on', function() {
-					get('/hallway/light/brightness/100');
+					get('/hallway/light/rgb/200,200,200');
 				});
 			};
 			var onLostMove = function() {
 				Hallway.lightTimer.start(function() {
-					get('/hallway/light/brightness/50');
+					get('/hallway/light/rgb/100,100,100');
 					Hallway.lightTimer.start(function() {
 						get('/hallway/light/off');
-					}, Hallway.onDuration / 2);
-				}, Hallway.onDuration / 2);
+					}, Hallway.onDuration / 2 * 1000);
+				}, Hallway.onDuration / 2 * 1000);
 			};
 
+			var self = this;
 			get('/entrance/motion', function(json) {
 				var newState = parseInt(json.results[0].result.state, 10);
-				if (newState !== Hallway.lightState) {
+				if (newState !== Hallway.lightState ||
+					self.count % (Hallway.onDuration / Hallway.checkInterval) === 0) {
 					Hallway.lightState = newState;
 					if (newState === 1) {
 						onDetectMove();
@@ -54,6 +57,8 @@ module.exports = [
 					}
 				}
 			});
+
+			++this.count;
 		}
 	},
 	{
@@ -66,16 +71,16 @@ module.exports = [
 				var onDetectMove = function() {
 					Toilet.lightTimer.stop();
 					get('/toilet/light/on', function() {
-						get('/hallway/light/brightness/100');
+						get('/toilet/light/rgb/200,200,200');
 					});
 				};
 				var onLostMove = function() {
 					Toilet.lightTimer.start(function() {
-						get('/toilet/light/brightness/50');
+						get('/toilet/light/rgb/100,100,100');
 						Toilet.lightTimer.start(function() {
 							get('/toilet/light/off');
-						}, Toilet.onDuration / 2);
-					}, Toilet.onDuration / 2);
+						}, Toilet.onDuration / 2 * 1000);
+					}, Toilet.onDuration / 2 * 1000);
 				};
 
 				var newState = parseInt(json.results[0].result.state, 10);

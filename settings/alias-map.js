@@ -38,7 +38,7 @@ module.exports = {
 	'/projector/shutdown'   : '/macro/projector/shutdown',
 	'/projector/input/hdmi' : '/macro/projector/input/hdmi',
 
-	// wemo
+	// wemo motion
 	'/entrance/motion' : '/device/wemo/motion/entrance/state',
 	'/toilet/motion'   : '/device/wemo/motion/toilet/state',
 

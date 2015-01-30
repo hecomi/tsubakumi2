@@ -8,7 +8,7 @@ d.run(function() {
 		setInterval(function() {
 			console.log('[%s,\t%d times,\t%s] fired', event.name, cnt, new Date());
 			event.func(cnt++);
-		}, event.interval);
+		}, event.interval * 1000);
 	});
 });
 d.on('error', console.error);

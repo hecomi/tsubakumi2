@@ -53,68 +53,68 @@ module.exports = [
 		}
 	},
 	{
-		word: '電気をつけて',
+		word: '部屋の電気をつけて',
 		rule: {
 			reply: '電気をつけます',
 			api: '/light/on'
 		}
 	},
 	{
-		word: '電気を明るく',
+		word: '部屋の電気を明るく',
 		rule: {
 			reply: '電気を明るくします',
 			api: '/light/high'
 		}
 	},
 	{
-		word: '電気を?ちょっと明るく(して)?',
+		word: '部屋の電気を?ちょっと明るく(して)?',
 		rule: {
 			reply: '電気をちょっと明るくします',
 			api: '/light/medium-high'
 		}
 	},
 	{
-		word: '電気を?ちょっと暗く(して)?',
+		word: '部屋の電気を?ちょっと暗く(して)?',
 		rule: {
 			reply: '電気をちょっと暗くします',
 			api: '/light/medium-low'
 		}
 	},
 	{
-		word: '電気を?暗く(して)?',
+		word: '部屋の電気を?暗く(して)?',
 		rule: {
 			reply: '電気を暗くします',
 			api: '/light/low'
 		}
 	},
 	{
-		word: '電気を?こだま',
+		word: '部屋の電気を?こだま',
 		rule: {
 			reply: '電気をこだまにします',
 			api: '/light/midget'
 		}
 	},
 	{
-		word: '電気を?(消して|オフ)',
+		word: '部屋の電気を?(消して|オフ)',
 		rule: {
 			reply: '電気を消します',
 			api: '/light/off'
 		}
 	},
-	{
-		word: 'マックのモニタを(つけて|オン)',
-		rule: {
-			reply: 'マックのモニタをつけます',
-			api: '/mac/monitor/on'
-		}
-	},
-	{
-		word: 'マックのモニタを(消して|オフ)',
-		rule: {
-			reply: 'マックのモニタを消します',
-			api: '/mac/monitor/off'
-		}
-	},
+	// {
+	// 	word: 'マックのモニタを(つけて|オン)',
+	// 	rule: {
+	// 		reply: 'マックのモニタをつけます',
+	// 		api: '/mac/monitor/on'
+	// 	}
+	// },
+	// {
+	// 	word: 'マックのモニタを(消して|オフ)',
+	// 	rule: {
+	// 		reply: 'マックのモニタを消します',
+	// 		api: '/mac/monitor/off'
+	// 	}
+	// },
 	{
 		word: 'ウインドウズのモニタを(つけて|オン)',
 		rule: {
@@ -771,6 +771,76 @@ module.exports = [
 		rule: {
 			reply: 'プロジェクタエッチディーエムアイ4',
 			api: '/projector/hdmi 4'
+		}
+	},
+	{
+		word: '廊下の電気を(消して|オフ)',
+		rule: {
+			reply: '廊下の電気を消します',
+			api: '/hallway/light/off'
+		}
+	},
+	{
+		word: '廊下の電気を(つけて|オン)',
+		rule: {
+			reply: '廊下の電気をつけます',
+			api: '/hallway/light/on'
+		}
+	},
+	{
+		word: '玄関の電気を(消して|オフ)',
+		rule: {
+			reply: '玄関の電気を消します',
+			api: '/entrance/light/off'
+		}
+	},
+	{
+		word: '玄関の電気を(つけて|オン)',
+		rule: {
+			reply: '玄関の電気をつけます',
+			api: '/entrance/light/on'
+		}
+	},
+	{
+		word: 'トイレの電気を(消して|オフ)',
+		rule: {
+			reply: 'トイレの電気を消します',
+			api: '/toilet/light/off'
+		}
+	},
+	{
+		word: 'トイレの電気を(つけて|オン)',
+		rule: {
+			reply: 'トイレの電気をつけます',
+			api: '/toilet/light/on'
+		}
+	},
+	{
+		word: '(洗面所|脱衣所)の電気を(消して|オフ)',
+		rule: {
+			reply: '洗面所の電気を消します',
+			api: '/lavatory/light/off'
+		}
+	},
+	{
+		word: '(洗面所|脱衣所)の電気を(つけて|オン)',
+		rule: {
+			reply: '洗面所の電気をつけます',
+			api: '/lavatory/light/on'
+		}
+	},
+	{
+		word: '(全て|全部)の電気を(消して|オフ)',
+		rule: {
+			reply: '全ての電気を消します',
+			api: '/all/light/off'
+		}
+	},
+	{
+		word: '(全て|全部)の電気を(つけて|オン)',
+		rule: {
+			reply: '全ての電気をつけます',
+			api: '/all/light/on'
 		}
 	},
 ];
