@@ -19,7 +19,7 @@ module.exports = {
 		}
 	},
 	iRemocon: {
-		ip    : '192.168.0.5',
+		ip    : '192.168.0.4',
 		irMap : require('./settings/ir-map'),
 		test  : {
 			checkIrNum : 999,  // テストする IR 番号
@@ -53,5 +53,28 @@ module.exports = {
 	gmail   : secret.gmail,
 	controller: {
 		port: port + 1
+	},
+	websocket: {
+		port: port + 2
+	},
+	twelite: {
+		port: '/dev/tty.usbserial-AHXU1CX2',
+		sensors: [
+			{
+				id    : 1,
+				type  : 'host',
+				place : 'server'
+			},
+			{
+				id    : 2,
+				type  : '1-sensor',
+				place : 'entrance'
+			},
+			{
+				id    : 3,
+				type  : '4-switch',
+				place : 'bed'
+			},
+		]
 	}
 };

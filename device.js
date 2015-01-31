@@ -37,8 +37,12 @@ app.get('/device/hue/:api/:arg1', routes.device.hue);
 app.get('/device/hue/:api/:arg1/:arg2', routes.device.hue);
 app.get('/device/hue/:api/:arg1/:arg2/:arg3', routes.device.hue);
 
-// device
+// netatmo
 app.get('/device/netatmo/:api', routes.device.netatmo);
+
+// twelite
+app.get('/device/twelite/:api/:id', routes.device.twelite);
+app.get('/device/twelite/:api/:id/:value', routes.device.twelite);
 
 // Macro APIs
 // --------------------------------------------------------------------------------
