@@ -14,6 +14,7 @@
     "iremocon": "~0.0.1",
     "julius": "~0.0.6",
     "netatmo": "^1.0.0",
+    "node-gcm": "^0.9.14",
     "node-hue-api": "*",
     "node-ssdp": "^0.2.2",
     "openjtalk": "~0.1.0",

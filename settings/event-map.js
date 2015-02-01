@@ -16,20 +16,28 @@ var sp = new SerialPort(settings.twelite.port, {
 	parser   : parsers.readline('\r\n')
 });
 
+// Google Cloud Messaging
+// --------------------------------------------------------------------------------
+var android = require('../events/android');
+
 // Parameters
 // --------------------------------------------------------------------------------
 var Hallway = {
 	lightState    : 1,
 	lightTimer    : new Timer(),
 	checkInterval : 1,
-	onDuration    : 30
+	onDuration    : 30,
+	high          : '200,200,200',
+	low           : '100,100,100'
 };
 
 var Toilet = {
 	lightState    : 1,
 	lightTimer    : new Timer(),
 	checkInterval : 1,
-	onDuration    : 60
+	onDuration    : 60,
+	high          : '200,200,200',
+	low           : '100,100,100'
 };
 
 var Aircon = {
@@ -48,12 +56,12 @@ module.exports = [
 			var onDetectMove = function() {
 				Hallway.lightTimer.stop();
 				get('/hallway/light/on', function() {
-					get('/hallway/light/rgb/200,200,200');
+					get('/hallway/light/rgb/' + Hallway.high);
 				});
 			};
 			var onLostMove = function() {
 				Hallway.lightTimer.start(function() {
-					get('/hallway/light/rgb/100,100,100');
+					get('/hallway/light/rgb/' + Hallway.low);
 					Hallway.lightTimer.start(function() {
 						get('/hallway/light/off');
 					}, Hallway.onDuration / 2 * 1000);
@@ -88,12 +96,12 @@ module.exports = [
 				var onDetectMove = function() {
 					Toilet.lightTimer.stop();
 					get('/toilet/light/on', function() {
-						get('/toilet/light/rgb/200,200,200');
+						get('/toilet/light/rgb/' + Toilet.high);
 					});
 				};
 				var onLostMove = function() {
 					Toilet.lightTimer.start(function() {
-						get('/toilet/light/rgb/100,100,100');
+						get('/toilet/light/rgb/' + Toilet.low);
 						Toilet.lightTimer.start(function() {
 							get('/toilet/light/off');
 						}, Toilet.onDuration / 2 * 1000);
@@ -147,6 +155,36 @@ module.exports = [
 
 				switch (sensorData.deviceId) {
 					case 2:
+						if (sensorData.digitalInput == '01') {
+							android.send({
+								summary: 'ドアが開いた',
+								message: '部屋をオフにしますか？',
+								actions: [
+									{
+										title   : 'オフにする',
+										command : 'get',
+										value   : settings.address + '/all/off',
+										icon    : 'ic_media_play'
+									},
+									{
+										title   : 'オンにする',
+										command : 'get',
+										value   : settings.address + '/room/on',
+										icon    : 'ic_media_play'
+									},
+									{
+										title   : 'その他',
+										command : 'voice',
+										value   : {
+											url     : settings.controller.address + '/%s',
+											label   : 'コマンド入力',
+											choices : ['ただいま', '行ってきます', 'すべての電気を消して', 'エアコン消して', 'モニタを消して'],
+										},
+										icon : 'ic_media_play'
+									},
+								]
+							});
+						}
 						break;
 					case 3:
 						json.buttons = [
@@ -156,16 +194,16 @@ module.exports = [
 							(sensorData.digitalInput & 0x1) > 0
 						];
 						if (json.buttons[0]) {
-							get('/all/light/off');
+							get('/all/off');
 						}
 						if (json.buttons[1]) {
-							get('/all/light/on');
+							get('/room/on');
 						}
 						if (json.buttons[2]) {
-							get('/aircon/off');
+							get('/all/monitor/off');
 						}
 						if (json.buttons[3]) {
-							get('/aircon/on');
+							get('/all/monitor/on');
 						}
 						break;
 				}

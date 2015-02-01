@@ -1,3 +1,4 @@
+var _      = require('underscore');
 var ip     = require('ip');
 var secret = require('./settings/settings.secret');
 
@@ -6,7 +7,7 @@ var port = process.env.PORT || 23456;
 module.exports = {
 	port     : port,
 	host     : ip.address(),
-	address  : 'http://' + ip.address() + ':' + port,
+	address  : 'http://' + ip.address() + ':' + port + '/',
 	aliasMap : require('./settings/alias-map'),
 	macroMap : require('./settings/macro-map'),
 	command  : 'pm2',
@@ -29,17 +30,20 @@ module.exports = {
 	WeMo: {
 		// モニタのスイッチ
 		switches : {
-			monitor: {
-				name: 'Hecomi WeMo Switch 1'
+			monitor1: {
+				name: 'WeMo Switch 1'
+			},
+			monitor2: {
+				name: 'WeMo Switch 2'
 			}
 		},
 		// 玄関
 		motions : {
 			entrance: {
-				name: 'Hecomi WeMo Motion 1'
+				name: 'WeMo Motion 1'
 			},
 			toilet: {
-				name: 'Hecomi WeMo Motion 2'
+				name: 'WeMo Motion 2'
 			}
 		}
 	},
@@ -52,7 +56,8 @@ module.exports = {
 	twitter : secret.twitter,
 	gmail   : secret.gmail,
 	controller: {
-		port: port + 1
+		port: port + 1,
+		address  : 'http://' + ip.address() + ':' + (port + 1) + '/',
 	},
 	websocket: {
 		port: port + 2
@@ -76,5 +81,13 @@ module.exports = {
 				place : 'bed'
 			},
 		]
-	}
+	},
+	gcm: _.extend(secret.gcm, {
+		messageTemplate: {
+			title     : 'tsubakumi',
+			summary   : '家電コントロールシステム',
+			message   : 'メッセージはありません',
+			largeIcon : 'https://avatars0.githubusercontent.com/u/493433?v=3&s=120',
+		}
+	})
 };

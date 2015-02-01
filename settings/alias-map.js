@@ -1,15 +1,19 @@
 module.exports = {
 	// all
-	'/restart' : '/macro/restart',
+	'/restart'  : '/macro/restart',
+	'/all/off'  : ['/all/light/off', '/all/monitor/off'],
+	'/room/off' : ['/room/light/off', '/all/monitor/off'],
+	'/room/on'  : ['/room/light/on', '/all/monitor/on'],
 
 	// monitors
-	'/mac/monitor/on'      : '/device/wemo/switch/monitor/on',
-	'/mac/monitor/off'     : '/device/wemo/switch/monitor/off',
-	'/mac/monitor/state'   : '/device/wemo/switch/monitor/state',
-	'/windows/monitor/on'  : '/monitor/on',
-	'/windows/monitor/off' : '/monitor/off',
-	'/all/monitor/on'      : ['/mac/monitor/on', '/windows/monitor/on'],
-	'/all/monitor/off'     : ['/mac/monitor/off', '/windows/monitor/off'],
+	'/right/monitor/on'    : '/device/wemo/switch/monitor1/on',
+	'/right/monitor/off'   : '/device/wemo/switch/monitor1/off',
+	'/right/monitor/state' : '/device/wemo/switch/monitor1/state',
+	'/left/monitor/on'     : '/device/wemo/switch/monitor2/on',
+	'/left/monitor/off'    : '/device/wemo/switch/monitor2/off',
+	'/left/monitor/state'  : '/device/wemo/switch/monitor2/state',
+	'/all/monitor/on'      : ['/left/monitor/on', '/right/monitor/on'],
+	'/all/monitor/off'     : ['/left/monitor/off', '/right/monitor/off'],
 
 	// lights
 	'/entrance/light/on'  : '/device/hue/on/1',

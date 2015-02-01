@@ -116,7 +116,8 @@ app.get('/:word', function(req, res) {
 			return;
 		}
 		var regex = new RegExp(key);
-		if ( req.params.word.match(regex) ) {
+		var word = decodeURIComponent(req.params.word);
+		if ( word && word.match(regex) ) {
 			matched = true;
 			var reply = '';
 			if (rule.reply) {

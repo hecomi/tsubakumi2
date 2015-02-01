@@ -53,7 +53,7 @@ module.exports = [
 		}
 	},
 	{
-		word: '部屋の電気をつけて',
+		word: '部屋の電気を?つけて',
 		rule: {
 			reply: '電気をつけます',
 			api: '/light/on'
@@ -101,36 +101,36 @@ module.exports = [
 			api: '/light/off'
 		}
 	},
-	// {
-	// 	word: 'マックのモニタを(つけて|オン)',
-	// 	rule: {
-	// 		reply: 'マックのモニタをつけます',
-	// 		api: '/mac/monitor/on'
-	// 	}
-	// },
-	// {
-	// 	word: 'マックのモニタを(消して|オフ)',
-	// 	rule: {
-	// 		reply: 'マックのモニタを消します',
-	// 		api: '/mac/monitor/off'
-	// 	}
-	// },
 	{
-		word: 'ウインドウズのモニタを(つけて|オン)',
+		word: '左のモニタを(つけて|オン)',
 		rule: {
-			reply: 'ウインドウズのモニタをつけます',
-			api: '/windows/monitor/on'
+			reply: '左のモニタをつけます',
+			api: '/left/monitor/on'
 		}
 	},
 	{
-		word: 'ウインドウズのモニタを(消して|オフ)',
+		word: '左のモニタを(消して|オフ)',
 		rule: {
-			reply: 'ウインドウズのモニタを消します',
-			api: '/windows/monitor/off'
+			reply: '左のモニタを消します',
+			api: '/left/monitor/off'
 		}
 	},
 	{
-		word: '(すべての|全部)モニタを(消して|オフ)',
+		word: '右のモニタを(つけて|オン)',
+		rule: {
+			reply: '右のモニタをつけます',
+			api: '/right/monitor/on'
+		}
+	},
+	{
+		word: '右のモニタを(消して|オフ)',
+		rule: {
+			reply: '右のモニタを消します',
+			api: '/right/monitor/off'
+		}
+	},
+	{
+		word: '(すべての|全部)?モニタを(消して|オフ)',
 		rule: {
 			reply: 'モニタを消します',
 			api: '/all/monitor/off'
@@ -830,17 +830,31 @@ module.exports = [
 		}
 	},
 	{
-		word: '(全て|全部)の電気を(消して|オフ)',
+		word: '(すべて|全て|全部)の電気を(消して|オフ)',
 		rule: {
 			reply: '全ての電気を消します',
 			api: '/all/light/off'
 		}
 	},
 	{
-		word: '(全て|全部)の電気を(つけて|オン)',
+		word: '(すべて|全て|全部)の電気を(つけて|オン)',
 		rule: {
 			reply: '全ての電気をつけます',
 			api: '/all/light/on'
+		}
+	},
+	{
+		word: '行ってきます',
+		rule: {
+			reply: '行ってらっしゃーい',
+			api: '/all/off'
+		}
+	},
+	{
+		word: 'ただいま',
+		rule: {
+			reply: 'おかえりなさい',
+			api: '/room/on'
 		}
 	},
 ];
