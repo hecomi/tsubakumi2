@@ -8,29 +8,47 @@ var domain   = require('domain');
 var settings = require('./settings');
 
 var scripts = [
-	'device.js',
-	'event.js',
-	'controller.js',
-	'speech.js',
-	'twitter.js',
-	'mail.js'
+	'all',
+	'device',
+	'event',
+	'controller',
+	'speech',
+	'twitter',
+	'mail'
 ];
 
-var execScripts = function(command) {
+var run = function(res, command, script) {
+	if (scripts.indexOf(script) == -1) {
+		res.red('command "' + script + '" is not exist.\n');
+		res.print('available commands are:\n');
+		scripts.forEach(function(script) {
+			res.cyan(script + '\n');
+		});
+		res.prompt();
+		return;
+	}
+
+	if (script === 'all') {
+		scripts.forEach(function(script) {
+			if (script == 'all') return;
+			run(res, command, script);
+		});
+		return;
+	}
+
 	var d = domain.create();
 	d.run(function() {
-		scripts.forEach(function(script, index) {
-			setTimeout(function() {
-				exec(printf(command, script), function(err, stdout, stderr) {
-					if (err) throw err;
-					console.log('stdout > %s', stdout);
-					console.error('stderr > %s', stderr);
-				});
-			}, index * 1000);
+		exec(printf(command, script), function(err, stdout, stderr) {
+			if (err) throw err;
+			if (stdout) res.green(stdout.green);
+			if (stderr) res.red(stderr.red);
+			res.prompt();
 		});
 	});
+
 	d.on('error', function(err) {
-		console.error(err.stack);
+		res.red(err.stack);
+		res.prompt();
 	});
 };
 
@@ -44,17 +62,14 @@ app.configure(function() {
 	}));
 });
 
-app.cmd('start', 'start all servers', function(req, res) {
-	execScripts(settings.command + ' start %s');
-	res.prompt();
+app.cmd('start :script', 'start service', function(req, res) {
+	run(res, settings.command + ' start %s.js', req.params.script);
 });
 
-app.cmd('restart', 'restart all servers', function(req, res) {
-	execScripts(settings.command + ' restart %s');
-	res.prompt();
+app.cmd('restart :script', 'restart all servers', function(req, res) {
+	run(res, settings.command + ' restart %s.js', req.params.script);
 });
 
-app.cmd('stop', 'stop all servers', function(req, res) {
-	execScripts(settings.command + ' stop %s');
-	res.prompt();
+app.cmd('stop :script', 'stop all servers', function(req, res) {
+	run(res, settings.command + ' stop %s.js', req.params.script);
 });

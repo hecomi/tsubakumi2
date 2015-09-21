@@ -27,17 +27,17 @@ var Hallway = {
 	lightTimer    : new Timer(),
 	checkInterval : 1,
 	onDuration    : 30,
-	high          : '200,200,200',
-	low           : '100,100,100'
+	high          : '50,30,20',
+	low           : '6,5,3'
 };
 
 var Toilet = {
 	lightState    : 1,
 	lightTimer    : new Timer(),
 	checkInterval : 1,
-	onDuration    : 60,
-	high          : '200,200,200',
-	low           : '100,100,100'
+	onDuration    : 180,
+	high          : '50,30,20',
+	low           : '6,5,3'
 };
 
 var Aircon = {
