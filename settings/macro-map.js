@@ -1,10 +1,10 @@
 var _       = require('underscore');
-var get     = require('../utilities').get;
+var get     = require('../utils').get;
 var exec    = require('child_process').exec;
 
 module.exports = {
 	'restart': function(req, res) {
-		exec('touch app.js', function(err, stdout) {
+		exec('tsubakumi restart all', function(err, stdout) {
 			if (err) throw err;
 			res.jsonp({
 				command: stdout,

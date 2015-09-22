@@ -1,10 +1,8 @@
-var request = require('request');
-
-module.exports = function(app) {
+module.exports = app => {
 	return {
 		device     : require('./device')(app),
 		macro      : require('./macro')(app),
-		notfound   : function(req, res) {
+		notfound   : (req, res) => {
 			res.jsonp(404, { error: 'Not found' });
 		}
 	};

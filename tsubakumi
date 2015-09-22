@@ -1,0 +1,67 @@
+#!/Users/hecomi/.nodebrew/current/bin/node --harmony
+
+var shell    = require('shell');
+var app      = new shell();
+var printf   = require('printf');
+var exec     = require('child_process').exec;
+var domain   = require('domain');
+var settings = require('./settings').command;
+
+var run = (res, command, script) => {
+
+	if (settings.commands.indexOf(script) == -1) {
+		res.red('command "' + script + '" is not exist.\n');
+		res.print('available commands are:\n');
+		settings.commands.forEach(script => {
+			res.cyan(script + '\n');
+		});
+		res.prompt();
+		return;
+	}
+
+	if (script === 'all') {
+		settings.commands.forEach(script => {
+			if (script === 'all') return;
+			run(res, command, script);
+		});
+		return;
+	}
+
+	var d = domain.create();
+	d.run(() => {
+		var cmd = printf('%s %s %s.js %s', settings.app, command, script, settings.option);
+		exec(cmd, (err, stdout, stderr) => {
+			if (err) throw err;
+			if (stdout) res.green(stdout.green);
+			if (stderr) res.red(stderr.red);
+			res.prompt();
+		});
+	});
+
+	d.on('error', err => {
+		res.red(err.stack);
+		res.prompt();
+	});
+};
+
+app.configure(() => {
+	app.use(shell.history({ shell: app }));
+	app.use(shell.completer({ shell: app }));
+	app.use(shell.router({ shell: app }));
+	app.use(shell.help({
+		shell: app,
+		introduction: true
+	}));
+});
+
+app.cmd('start :script', 'Start service', (req, res) => {
+	run(res, 'start', req.params.script);
+});
+
+app.cmd('restart :script', 'Restart all servers', (req, res) => {
+	run(res, 'restart', req.params.script);
+});
+
+app.cmd('stop :script', 'Stop all servers', (req, res) => {
+	run(res, 'stop', req.params.script);
+});

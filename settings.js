@@ -1,3 +1,4 @@
+var fs     = require('fs');
 var _      = require('underscore');
 var ip     = require('ip');
 var secret = require('./settings/settings.secret');
@@ -10,7 +11,20 @@ module.exports = {
 	address  : 'http://' + ip.address() + ':' + port + '/',
 	aliasMap : require('./settings/alias-map'),
 	macroMap : require('./settings/macro-map'),
-	command  : 'pm2',
+	command  : {
+		app : 'pm2',
+		option: '--node-args="--harmony"',
+		commands: _.extend(
+			_.chain(fs.readdirSync('./services'))
+			.filter(path => (path.indexOf('.js') != -1))
+			.map(path => path.replace('.js', ''))
+			.map(path => './services/' + path)
+			.value().concat([
+				'all',
+				'api'
+			])
+		)
+	},
 	DB: {
 		host        : 'localhost',
 		port        : 27017,
@@ -61,6 +75,9 @@ module.exports = {
 	},
 	websocket: {
 		port: port + 2
+	},
+	gui: {
+		port: port + 3
 	},
 	twelite: {
 		port: '/dev/tty.usbserial-AHXU1CX2',

@@ -1,9 +1,9 @@
-var _             = require('underscore');
-var settings      = require('../settings');
-var gcm           = require('node-gcm');
+var _        = require('underscore');
+var gcm      = require('node-gcm');
+var settings = require('../settings');
 
 module.exports = {
-	send: function(opts) {
+	send: opts => {
 		var message = new gcm.Message({
 			collapseKey    : 'tsubakumi',
 			timeToLive     : 3,
@@ -16,7 +16,7 @@ module.exports = {
 		});
 
 		var sender = new gcm.Sender(settings.gcm.sender);
-		sender.send(message, settings.gcm.registrationIds, 4, function (err, result) {
+		sender.send(message, settings.gcm.registrationIds, 4, (err, result) => {
 			console.log(result);
 		});
 	}

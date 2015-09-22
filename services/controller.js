@@ -1,12 +1,12 @@
 var _        = require('underscore');
 var express  = require('express');
 var app      = express();
-var get      = require('./utilities').get;
-var settings = require('./settings');
+var get      = require('../utils').get;
+var settings = require('../settings');
 
 // Rule
 // --------------------------------------------------------------------------------
-var wordMap   = require('./settings/word-map');
+var wordMap   = require('../settings/word-map');
 var rules       = {};
 var recognizing = true;
 
@@ -61,16 +61,17 @@ for (var key in settings) {
 
 // ejs
 app.set('view engine', 'ejs');
-app.set('views', __dirname + '/views');
-app.use(express.static(__dirname + '/bower_components'));
-app.use(express.static(__dirname + '/views/public'));
+app.set('views', __dirname + '/../views');
+app.use(express.static(__dirname + '/../bower_components'));
+app.use(express.static(__dirname + '/../views/public'));
 
 // Middlewares
 // --------------------------------------------------------------------------------
 app.use(require('express-domain-middleware'));
 app.use(express.logger());
 app.use(express.favicon());
-app.use(express.bodyParser());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(app.router);
 app.use(require('./middlewares/errorHandler.js'));
 

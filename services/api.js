@@ -1,6 +1,6 @@
 var express  = require('express');
 var app      = express();
-var settings = require('./settings');
+var settings = require('../settings');
 
 // Settings
 // --------------------------------------------------------------------------------
@@ -14,13 +14,14 @@ for (var key in settings) {
 app.use(require('express-domain-middleware'));
 app.use(express.logger());
 app.use(express.favicon());
-app.use(express.bodyParser());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(app.router);
 app.use(require('./middlewares/errorHandler.js'));
 
 // Device APIs
 // --------------------------------------------------------------------------------
-var routes = require('./routes')(app);
+var routes = require('../routes')(app);
 
 // iRemocon
 app.get('/device/iremocon/:api', routes.device.iremocon);
@@ -54,7 +55,7 @@ app.get('/404', routes.notfound);
 
 // Aliases
 // --------------------------------------------------------------------------------
-app.get('*', require('./routes/alias')(app));
+app.get('*', require('../routes/alias')(app));
 
 // Start Server
 // --------------------------------------------------------------------------------

@@ -1,14 +1,14 @@
 var printf   = require('printf');
 var _        = require('underscore');
 
-var InvalidMacroError = function(msg) {
+var InvalidMacroError = msg => {
 	var e = new Error(msg);
 	e.name = 'InvalidMacroError';
 	return e;
 };
 
-module.exports = function(app) {
-	return function(req, res) {
+module.exports = app => {
+	return (req, res) => {
 		var macroMap = app.get('macroMap');
 		for (var url in macroMap) {
 			if (req.params[0] === url) {

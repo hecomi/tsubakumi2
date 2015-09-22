@@ -129,27 +129,6 @@ module.exports = function(app) {
 };
 ```
 
-Service API
------------
-
-Event
------
-定期的に行いたいものを `./settings/event-map.js` に定義しています。例えば WeMo Motion のポーリングをして、動きがあったらライトをつける、といったことをしています。
-処理は `./event.js` が行います。
-
-```javascript
-module.exports = [
-	{
-		name     : 'event name',
-		interval : 1000, // msec
-		func     : function() {
-			...
-		},
-		...
-	}
-];
-```
-
 Word Recognition API
 --------------------
 自然言語に対する処理と応答を行います。
@@ -231,10 +210,6 @@ TOOLs
 * **/hue/register.js**
 	* hue へユーザー ID の発行を依頼します。
 	* 使用例: `$ node ./tool/hue/search.js`
-
-外部からの操作
---------------
-ベーシック認証をかけて外部へ一部の API を公開しています（未実装）。
 
 TODO
 ----

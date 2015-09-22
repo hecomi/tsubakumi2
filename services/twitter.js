@@ -2,9 +2,9 @@ var _          = require('underscore');
 var date_utils = require('date-utils');
 var printf     = require('printf');
 
-var get        = require('./utilities').get;
-var settings   = require('./settings.js');
-var speechMap  = require('./settings/word-map.js');
+var get        = require('../utils').get;
+var settings   = require('../settings');
+var speechMap  = require('../settings/word-map');
 var rules      = {};
 
 var twitter    = require('twitter');

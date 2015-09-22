@@ -1,6 +1,6 @@
 var domain    = require('domain');
-var wordMap   = require('./settings/word-map');
-var query     = require('./utilities').query;
+var wordMap   = require('../settings/word-map');
+var query     = require('../utils').query;
 
 var Julius    = require('julius');
 var grammar   = new Julius.Grammar();

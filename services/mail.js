@@ -1,7 +1,7 @@
-var inbox     = require('inbox');
-var _         = require('underscore');
-var settings  = require('./settings');
-var utilities = require('./utilities');
+var inbox    = require('inbox');
+var _        = require('underscore');
+var settings = require('../settings');
+var utils    = require('../utils');
 
 var client = inbox.createConnection(false, 'imap.gmail.com', {
 	secureConnection: true,

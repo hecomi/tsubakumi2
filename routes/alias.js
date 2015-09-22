@@ -1,23 +1,23 @@
 var _    = require('underscore');
-var get  = require('../utilities').get;
+var get  = require('../utils').get;
 var util = require('util');
 
-module.exports = function(app) {
+module.exports = app => {
 
-	var aliasMapHandler = function(req, res) {
+	var aliasMapHandler = (req, res) => {
 		var url = req.params[0];
 		var endFlag = false;
 		var aliasMap = app.get('aliasMap');
 
-		_.keys(aliasMap).forEach(function(api) {
+		_.keys(aliasMap).forEach(api => {
 			if ( url.match(new RegExp(api)) ) {
 				var args = [RegExp.$1, RegExp.$2, RegExp.$3];
 				endFlag = true;
 				var aliases = aliasMap[api] instanceof Array ? aliasMap[api] : [ aliasMap[api] ];
 				var results = [];
-				aliases.forEach(function(alias) {
+				aliases.forEach(alias => {
 					alias = util.format(alias, args[0], args[1], args[2]);
-					get(alias, function(json) {
+					get(alias, json => {
 						results.push({
 							url    : alias,
 							result : json
@@ -38,16 +38,16 @@ module.exports = function(app) {
 		return endFlag;
 	};
 
-	var iRemoconHandler = function(req, res) {
+	var iRemoconHandler = (req, res) => {
 		var url = req.params[0];
 		var endFlag = false;
 
-		_.chain(app.get('iRemocon').irMap).invert().keys().each(function(keys) {
-			keys.split(',').forEach(function(key) {
+		_.chain(app.get('iRemocon').irMap).invert().keys().each(keys => {
+			keys.split(',').forEach(key => {
 				var api = '/' + key.replace(/\s/g, '/');
 				if (url.match(api) && !endFlag) {
 					endFlag = true;
-					get('/device/iremocon/is' + url, function(json) {
+					get('/device/iremocon/is' + url, json => {
 						res.jsonp({
 							url    : url,
 							alias  : '/device/iremocon/is' + url,
@@ -62,12 +62,12 @@ module.exports = function(app) {
 		return endFlag;
 	};
 
-	return function(req, res) {
+	return (req, res) => {
 		var endFlag = false;
 
 		if (aliasMapHandler(req, res)) return;
 		if (iRemoconHandler(req, res)) return;
 
-		get('/404', function(json) { res.jsonp(json); });
+		get('/404', json => { res.jsonp(json); });
 	};
 };
