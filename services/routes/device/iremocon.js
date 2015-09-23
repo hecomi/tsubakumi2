@@ -1,26 +1,26 @@
 var iRemocon = require('iRemocon');
 var _ = require('underscore');
 
-var InvalidArgumentsError = function(msg) {
+var InvalidArgumentsError = msg => {
 	var e = new Error(msg);
 	e.name = 'InvalidArgumentsError';
 	return e;
 };
 
-var InvalidApiError = function(msg) {
+var InvalidApiError = msg => {
 	var e = new Error(msg);
 	e.name = 'InvalidApiError';
 	return e;
 };
 
-var iRemoconError = function(err) {
+var iRemoconError = err => {
 	var e = new Error('[' + err.code + '] ' + err.error);
 	e.name = 'iRemoconError';
 	return e;
 };
 
-module.exports = function(app) {
-	return function(req, res) {
+var routes = app => {
+	return (req, res) => {
 		var ir = new iRemocon(app.get('iRemocon').ip);
 		switch (req.params.api) {
 			case 'list':
@@ -30,7 +30,7 @@ module.exports = function(app) {
 				res.jsonp({ msg: ir.getIP() });
 				break;
 			case 'au':
-				ir.au(function(err, result) {
+				ir.au((err, result) => {
 					if (err) throw iRemoconError(err);
 					res.jsonp({ msg: result });
 				});
@@ -40,13 +40,13 @@ module.exports = function(app) {
 					throw InvalidArgumentsError('argument is undefined');
 				}
 				var namedMap = {};
-				_.chain(app.get('iRemocon').irMap).invert().keys().each(function(keys) {
-					keys.split(',').forEach(function(key) {
+				_.chain(app.get('iRemocon').irMap).invert().keys().each(keys => {
+					keys.split(',').forEach(key => {
 						namedMap[key.replace(/\s/g, '/')] = _.invert(app.get('iRemocon').irMap)[keys];
 					});
 				});
 				var no = req.params.no || namedMap[req.params[0]];
-				ir.is(no, function(err, result) {
+				ir.is(no, (err, result) => {
 					if (err) throw iRemoconError(err);
 					res.jsonp({
 						ir   : req.params.no,
@@ -59,7 +59,7 @@ module.exports = function(app) {
 				if (!req.params.no && !req.params.name) {
 					throw InvalidArgumentsError('argument is undefined');
 				}
-				ir.ic(no, function(err, result) {
+				ir.ic(no, (err, result) => {
 					if (err) throw iRemoconError(err);
 					console.log(result);
 					res.jsonp({
@@ -70,7 +70,7 @@ module.exports = function(app) {
 				});
 				break;
 			case 'cc':
-				ir.cc(function(err, result) {
+				ir.cc((err, result) => {
 					if (err) throw iRemoconError(err);
 					res.jsonp({
 						ir   : req.params.no,
@@ -83,4 +83,11 @@ module.exports = function(app) {
 				throw InvalidApiError('"' + req.params.api + '" is not iRemocon API');
 		}
 	};
+};
+
+module.exports = app => {
+	var api = routes(app);
+	app.get('/device/iremocon/:api', api);
+	app.get('/device/iremocon/:api/:no([0-9]+)', api);
+	app.get('/device/iremocon/:api/*', api);
 };

@@ -3,17 +3,17 @@ var HueApi      = hue.HueApi;
 var lightState  = hue.lightState;
 var lightStates = [];
 
-var InvalidApiError = function(msg) {
+var InvalidApiError = msg => {
 	var e = new Error(msg);
 	e.name = 'InvalidApiError';
 	return e;
 };
 
-module.exports = function(app) {
-	return function(req, res) {
+var routes = app => {
+	return (req, res) => {
 		var api = new HueApi(app.get('hue').ip, app.get('hue').user);
-		var callHueApi = function(apiName, arg1, arg2) {
-			var callback = function(err, result) {
+		var callHueApi = (apiName, arg1, arg2) => {
+			var callback = (err, result) => {
 				if (err) throw err;
 				if (typeof(result) !== 'object') {
 					res.jsonp({ result: result });
@@ -105,4 +105,12 @@ module.exports = function(app) {
 				throw InvalidApiError('"' + req.params.api + '" is not hue API');
 		}
 	};
+};
+
+module.exports = app => {
+	var api = routes(app);
+	app.get('/device/hue/:api', api);
+	app.get('/device/hue/:api/:arg1', api);
+	app.get('/device/hue/:api/:arg1/:arg2', api);
+	app.get('/device/hue/:api/:arg1/:arg2/:arg3', api);
 };

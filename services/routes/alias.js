@@ -1,5 +1,5 @@
 var _    = require('underscore');
-var get  = require('../utils').get;
+var get  = require('../../utils').get;
 var util = require('util');
 
 module.exports = app => {

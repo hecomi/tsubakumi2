@@ -19,43 +19,19 @@ app.use(express.json());
 app.use(app.router);
 app.use(require('./middlewares/errorHandler.js'));
 
-// Device APIs
+// Routings
 // --------------------------------------------------------------------------------
-var routes = require('../routes')(app);
-
-// iRemocon
-app.get('/device/iremocon/:api', routes.device.iremocon);
-app.get('/device/iremocon/:api/:no([0-9]+)', routes.device.iremocon);
-app.get('/device/iremocon/:api/*', routes.device.iremocon);
-
-// WeMo
-app.get('/device/wemo/switch/:target/:api', routes.device.wemo.switches);
-app.get('/device/wemo/motion/:target/:api', routes.device.wemo.motions);
-
-// hue
-app.get('/device/hue/:api', routes.device.hue);
-app.get('/device/hue/:api/:arg1', routes.device.hue);
-app.get('/device/hue/:api/:arg1/:arg2', routes.device.hue);
-app.get('/device/hue/:api/:arg1/:arg2/:arg3', routes.device.hue);
-
-// netatmo
-app.get('/device/netatmo/:api', routes.device.netatmo);
-
-// twelite
-app.get('/device/twelite/:api/:id', routes.device.twelite);
-app.get('/device/twelite/:api/:id/:value', routes.device.twelite);
-
-// Macro APIs
-// --------------------------------------------------------------------------------
-app.get('/macro/*', routes.macro);
+var routes = require('./routes')(app);
 
 // Errors
 // --------------------------------------------------------------------------------
-app.get('/404', routes.notfound);
+app.get('/404', (req, res) => {
+	res.jsonp(404, { error: 'Not found' });
+});
 
 // Aliases
 // --------------------------------------------------------------------------------
-app.get('*', require('../routes/alias')(app));
+app.get('*', routes.alias);
 
 // Start Server
 // --------------------------------------------------------------------------------
@@ -64,6 +40,6 @@ console.log('PORT:', app.get('port'));
 
 // Unexpected Errors
 // --------------------------------------------------------------------------------
-process.on('uncaughtException', function(err) {
+process.on('uncaughtException', err => {
 	console.error('UNCAUGHT EXCEPTION:', err);
 });

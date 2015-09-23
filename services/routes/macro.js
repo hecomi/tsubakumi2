@@ -7,7 +7,7 @@ var InvalidMacroError = msg => {
 	return e;
 };
 
-module.exports = app => {
+var routes = app => {
 	return (req, res) => {
 		var macroMap = app.get('macroMap');
 		for (var url in macroMap) {
@@ -18,4 +18,9 @@ module.exports = app => {
 		}
 		throw InvalidMacroError(printf('"%s" is not defined as Macro API', req.params[0]));
 	};
+};
+
+module.exports = app => {
+	var api = routes(app);
+	app.get('/macro/*', api);
 };

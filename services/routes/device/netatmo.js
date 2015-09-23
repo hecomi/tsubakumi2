@@ -1,17 +1,17 @@
 var netatmo  = require('netatmo');
 
-module.exports = function(app) {
+var routes = app => {
 	var api = new netatmo(app.get('netatmo'));
 
-	var room = function(res, devices) {
-		devices.forEach(function(device) {
+	var room = (res, devices) => {
+		devices.forEach(device => {
 			api.getMeasure({
 				device_id : device._id,
 				scale     : '30min',
 				type      : ['Temperature', 'Humidity', 'Pressure', 'Noise', 'CO2']
-			}, function(err, measure) {
+			}, (err, measure) => {
 				if (err) throw err;
-				measure.forEach(function(result) {
+				measure.forEach(result => {
 					var last      = result.value.length - 1;
 					var timestamp = (result.beg_time + result.step_time * last) * 1000;
 					var val       = result.value[last];
@@ -29,16 +29,16 @@ module.exports = function(app) {
 		});
 	};
 
-	var outside = function(res, devices) {
-		devices.forEach(function(device) {
+	var outside = (res, devices) => {
+		devices.forEach(device => {
 			api.getMeasure({
 				device_id : device._id,
 				scale     : '30min',
 				module_id : device.modules[0],
 				type      : ['Temperature', 'Humidity']
-			}, function(err, measure) {
+			}, (err, measure) => {
 				if (err) throw err;
-				measure.forEach(function(result) {
+				measure.forEach(result => {
 					var last      = result.value.length - 1;
 					var timestamp = (result.beg_time + result.step_time * last) * 1000;
 					var val       = result.value[last];
@@ -53,8 +53,8 @@ module.exports = function(app) {
 		});
 	};
 
-	return function(req, res) {
-		api.getDevicelist(function(err, devices, modules) {
+	return (req, res) => {
+		api.getDevicelist((err, devices, modules) => {
 			if (err) throw err;
 			switch (req.params.api) {
 				case 'inside':
@@ -69,3 +69,7 @@ module.exports = function(app) {
 	};
 };
 
+module.exports = app => {
+	var api = routes(app);
+	app.get('/device/netatmo/:api', api);
+};

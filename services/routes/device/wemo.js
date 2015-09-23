@@ -1,24 +1,24 @@
 var WeMo   = require('wemo');
 
-var WeMoNotFoundError = function(ip, port) {
+var WeMoNotFoundError = (ip, port) => {
 	var e = new Error('WeMo@' + ip + ':' + port + ' is not found');
 	e.name = 'WeMoNotFoundError';
 	return e;
 };
 
-var InvalidArgumentsError = function(msg) {
+var InvalidArgumentsError = msg => {
 	var e = new Error(msg);
 	e.name = 'InvalidArgumentsError';
 	return e;
 };
 
-var InvalidApiError = function(msg) {
+var InvalidApiError = msg => {
 	var e = new Error(msg);
 	e.name = 'InvalidApiError';
 	return e;
 };
 
-var WeMoHandler = function(target) {
+var WeMoHandler = target => {
 	this.target = target;
 	this.name   = target.name;
 	this.wemo   = null;
@@ -26,59 +26,60 @@ var WeMoHandler = function(target) {
 };
 
 WeMoHandler.prototype = {
-	search: function(callback) {
+	search: callback => {
 		if (!this.isSearching && this.wemo !== null) {
 			callback();
 			return;
 		}
 		if (!this.isSearching && this.wemo === null) {
 			this.isSearching = true;
-			WeMo.Search(this.name, function(err, device) {
-				this.isSearching = false;
+			var self = this;
+			WeMo.Search(this.name, (err, device) => {
+				self.isSearching = false;
 				if (err) return;
-				this.ip   = device.ip;
-				this.port = device.port;
-				this.wemo = new WeMo(this.ip, this.port);
-			}.bind(this));
+				self.ip   = device.ip;
+				self.port = device.port;
+				self.wemo = new WeMo(self.ip, self.port);
+			});
 		}
 		if (typeof(callback) === 'function') {
 			callback(new Error(this.name + ' has not been found yet'));
 		}
 	},
-	state: function(callback) {
+	state: callback => {
 		var self = this;
-		this.search(function(err) {
+		this.search(err => {
 			if (err) {
 				callback(err);
 				return;
 			}
-			self.wemo.getBinaryState(function(err, result) {
+			self.wemo.getBinaryState((err, result) => {
 				if (err) { self.wemo = null; }
 				callback(err, result);
 			});
 		});
 	},
-	on: function(callback) {
+	on: callback => {
 		var self = this;
-		this.search(function(err) {
+		this.search(err => {
 			if (err) {
 				callback(err);
 				return;
 			}
-			self.wemo.setBinaryState(1, function(err, result) {
+			self.wemo.setBinaryState(1, (err, result) => {
 				if (err) { self.wemo = null; }
 				callback(err, result);
 			});
 		});
 	},
-	off: function(callback) {
+	off: callback => {
 		var self = this;
-		this.search(function(err) {
+		this.search(err => {
 			if (err) {
 				callback(err);
 				return;
 			}
-			self.wemo.setBinaryState(0, function(err, result) {
+			self.wemo.setBinaryState(0, (err, result) => {
 				if (err) { self.wemo = null; }
 				callback(err, result);
 			});
@@ -86,9 +87,9 @@ WeMoHandler.prototype = {
 	}
 };
 
-module.exports = function(app) {
+var routes = app => {
 	return {
-		switches: function(req, res) {
+		switches: (req, res) => {
 			var target = req.params.target;
 			if (!(target in app.get('WeMo').switches)) {
 				throw new InvalidArgumentsError(target + ' is not registered as WeMo Switch device');
@@ -100,19 +101,19 @@ module.exports = function(app) {
 
 			switch (req.params.api) {
 				case 'state':
-					wemo.state(function(err,result) {
+					wemo.state((err,result) => {
 						if (err) throw err;
 						res.jsonp({ state: result });
 					});
 					break;
 				case 'on':
-					wemo.on(function(err,result) {
+					wemo.on((err,result) => {
 						if (err) throw err;
 						res.jsonp({ state: result });
 					});
 					break;
 				case 'off':
-					wemo.off(function(err,result) {
+					wemo.off((err,result) => {
 						if (err) throw err;
 						res.jsonp({ state: result });
 					});
@@ -122,7 +123,7 @@ module.exports = function(app) {
 			}
 		},
 
-		motions: function(req, res) {
+		motions: (req, res) => {
 			var target = req.params.target;
 
 			if (!(target in app.get('WeMo').motions)) {
@@ -135,7 +136,7 @@ module.exports = function(app) {
 
 			switch (req.params.api) {
 				case 'state':
-					wemo.state(function(err,result) {
+					wemo.state((err, result) => {
 						if (err) throw err;
 						res.jsonp({ state: result });
 					});
@@ -145,4 +146,10 @@ module.exports = function(app) {
 			}
 		}
 	};
+};
+
+module.exports = app => {
+	var api = routes(app);
+	app.get('/device/wemo/switch/:target/:api', api.switches);
+	app.get('/device/wemo/motion/:target/:api', api.motions);
 };
