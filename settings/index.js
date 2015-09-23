@@ -1,7 +1,7 @@
 var fs     = require('fs');
 var _      = require('underscore');
 var ip     = require('ip');
-var secret = require('./settings/settings.secret');
+var secret = require('./settings.secret');
 
 var port = process.env.PORT || 23456;
 
@@ -9,8 +9,8 @@ module.exports = {
 	port     : port,
 	host     : ip.address(),
 	address  : 'http://' + ip.address() + ':' + port + '/',
-	aliasMap : require('./settings/alias-map'),
-	macroMap : require('./settings/macro-map'),
+	aliasMap : require('./alias-map'),
+	macroMap : require('./macro-map'),
 	command  : {
 		app : 'pm2',
 		option: '--node-args="--harmony"',
@@ -33,7 +33,7 @@ module.exports = {
 	},
 	iRemocon: {
 		ip    : '192.168.0.4',
-		irMap : require('./settings/ir-map'),
+		irMap : require('./ir-map'),
 		test  : {
 			checkIrNum : 999,  // テストする IR 番号
 			isCheckIc  : false // 赤外線の学習のテストをするか
