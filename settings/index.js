@@ -69,7 +69,8 @@ module.exports = {
 		address  : 'http://' + ip.address() + ':' + (port + 1) + '/',
 	},
 	websocket: {
-		port: port + 2
+		port: port + 2,
+		address  : 'http://' + ip.address() + ':' + (port + 2) + '/',
 	},
 	gui: {
 		port: port + 3
