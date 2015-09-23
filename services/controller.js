@@ -61,9 +61,9 @@ for (var key in settings) {
 
 // ejs
 app.set('view engine', 'ejs');
-app.set('views', __dirname + '/../views');
+app.set('views', __dirname + '/views');
 app.use(express.static(__dirname + '/../bower_components'));
-app.use(express.static(__dirname + '/../views/public'));
+app.use(express.static(__dirname + '/views/public'));
 
 // Middlewares
 // --------------------------------------------------------------------------------
