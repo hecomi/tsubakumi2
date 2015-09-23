@@ -66,3 +66,8 @@ app.cmd('ls', 'Show all services statuses', (req, res) => {
 app.cmd('kill', 'Kill all services', (req, res) => {
 	run(res, 'kill');
 });
+
+app.cmd('clean', 'Clean intermediates', (req, res) => {
+	execSync(printf('rm %s/*.wav', __dirname));
+	res.prompt();
+});

@@ -1,5 +1,4 @@
 var printf   = require('printf');
-var _        = require('underscore');
 
 var InvalidMacroError = msg => {
 	var e = new Error(msg);

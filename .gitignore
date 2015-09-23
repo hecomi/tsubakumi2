@@ -2,3 +2,4 @@ node_modules
 bower_components
 settings/settings.secret.js
 npm-debug.log
+*.wav

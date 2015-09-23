@@ -1,13 +1,11 @@
-var domain    = require('domain');
-var wordMap   = require('../settings/word-map');
-var query     = require('../utils').query;
-
-var Julius    = require('julius');
-var grammar   = new Julius.Grammar();
-var replying  = false;
-
-var OpenJTalk = require('openjtalk');
-var openjtalk = new OpenJTalk();
+var domain   = require('domain');
+var wordMap  = require('../settings/word-map');
+var utils    = require('../utils');
+var query    = require('../utils').query;
+var tts      = require('../utils').tts;
+var Julius   = require('julius');
+var grammar  = new Julius.Grammar();
+var replying = false;
 
 // 声で返答
 var reply = word => {
@@ -16,13 +14,11 @@ var reply = word => {
 		return;
 	}
 	word = (word instanceof Array) ? word : [word];
-	replying = true;
 	var index = Math.floor(Math.random() * word.length);
 	console.log('[返答]', word[index]);
-	openjtalk.talk(word[index], () => {
-		setTimeout(() => {
-			replying = false;
-		}, 1000);
+	replying = true;
+	tts(word[index], () => {
+		replying = false;
 	});
 };
 
@@ -49,7 +45,7 @@ wordMap.push({
 });
 
 // 音声認識の文法を登録
-wordMap.forEach(speech => {
+wordMap.forEach(function(speech) {
 	if (!speech || !speech.word || !speech.rule) {
 		throw new Error('word-map.js contains invalid data');
 	}
@@ -58,7 +54,7 @@ wordMap.forEach(speech => {
 });
 
 // 音声認識開始
-grammar.compile((err, result) => {
+grammar.compile(function(err, result) {
 	if (err) throw err;
 
 	var julius = new Julius( grammar.getJconf() );
@@ -66,24 +62,24 @@ grammar.compile((err, result) => {
 	grammar.deleteFiles();
 
 	// 応答を登録
-	julius.on('result', str => {
+	julius.on('result', function(str) {
 		if (replying) { return; }
 		console.log('[認識結果]', str);
 
 		var d = domain.create();
-		d.run(() => {
-			query(str, result => {
+		d.run(function() {
+			query(str, function(result) {
 				if (result && result.reply) {
 					reply(result.reply);
 				}
 			});
 		});
-		d.on('error', e => {
+		d.on('error', function(e) {
 			console.error(e.toString());
 		});
 	});
 });
 
-process.on('uncaughtException', err => {
+process.on('uncaughtException', function(err) {
 	console.error('UNCAUGHT EXCEPTION:', err);
 });
