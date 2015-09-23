@@ -12,29 +12,29 @@ var bot        = new twitter(settings.twitter);
 var friends    = [];
 
 // Twitter で返答
-var reply = function(id, word) {
+var reply = (id, word) => {
 	word = (word instanceof Array) ? word : [word];
 	var index = Math.floor(Math.random() * word.length);
 	var msg = printf('@%s %s [%s]', id, word[index], new Date().toFormat('YYYY/MM/DD HH24:MI:SS'));
-	bot.updateStatus(msg, function(data) {
+	bot.updateStatus(msg, data => {
 		// TODO: Error Check
 	});
 };
 
 // Speech Map を便利な形に変換
-speechMap.forEach(function(speech) {
+speechMap.forEach(speech => {
 	if (!speech || !speech.word || !speech.rule) {
 		throw new Error('speech-map.js contains invalid data');
 	}
 	var words = (speech.word instanceof Array) ? speech.word : [speech.word];
-	words.forEach(function(word) {
+	words.forEach(word => {
 		rules[word] = speech.rule;
 	});
 });
 
 // ストリームをチェック
-bot.stream('user', function(stream) {
-	stream.on('data', function(data) {
+bot.stream('user', stream => {
+	stream.on('data', data => {
 		// フレンドリストの格納
 		if (data && data.friends) {
 			friends = data.friends;
@@ -57,7 +57,7 @@ bot.stream('user', function(stream) {
 
 		console.log('[ツイート] %s (by %s)', data.text, id);
 
-		_.each(rules, function(rule, key) {
+		_.each(rules, (rule, key) => {
 			var regex = new RegExp(key);
 			if ( data.text.match(regex) ) {
 				if (rule.reply) {
@@ -79,6 +79,6 @@ bot.stream('user', function(stream) {
 	});
 });
 
-process.on('uncaughtException', function(err) {
+process.on('uncaughtException', err => {
 	console.error('UNCAUGHT EXCEPTION:', err);
 });

@@ -10,7 +10,7 @@ var OpenJTalk = require('openjtalk');
 var openjtalk = new OpenJTalk();
 
 // 声で返答
-var reply = function(word) {
+var reply = word => {
 	if (!word) {
 		console.warn('%s is invalid to be speeched.', word);
 		return;
@@ -19,8 +19,8 @@ var reply = function(word) {
 	replying = true;
 	var index = Math.floor(Math.random() * word.length);
 	console.log('[返答]', word[index]);
-	openjtalk.talk(word[index], function() {
-		setTimeout(function() {
+	openjtalk.talk(word[index], () => {
+		setTimeout(() => {
 			replying = false;
 		}, 1000);
 	});
@@ -49,7 +49,7 @@ wordMap.push({
 });
 
 // 音声認識の文法を登録
-wordMap.forEach(function(speech) {
+wordMap.forEach(speech => {
 	if (!speech || !speech.word || !speech.rule) {
 		throw new Error('word-map.js contains invalid data');
 	}
@@ -58,7 +58,7 @@ wordMap.forEach(function(speech) {
 });
 
 // 音声認識開始
-grammar.compile(function(err, result) {
+grammar.compile((err, result) => {
 	if (err) throw err;
 
 	var julius = new Julius( grammar.getJconf() );
@@ -66,24 +66,24 @@ grammar.compile(function(err, result) {
 	grammar.deleteFiles();
 
 	// 応答を登録
-	julius.on('result', function(str) {
+	julius.on('result', str => {
 		if (replying) { return; }
 		console.log('[認識結果]', str);
 
 		var d = domain.create();
-		d.run(function() {
-			query(str, function(result) {
+		d.run(() => {
+			query(str, result => {
 				if (result && result.reply) {
 					reply(result.reply);
 				}
 			});
 		});
-		d.on('error', function(e) {
+		d.on('error', e => {
 			console.error(e.toString());
 		});
 	});
 });
 
-process.on('uncaughtException', function(err) {
+process.on('uncaughtException', err => {
 	console.error('UNCAUGHT EXCEPTION:', err);
 });

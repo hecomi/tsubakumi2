@@ -8,14 +8,14 @@ var client = inbox.createConnection(false, 'imap.gmail.com', {
 	auth: settings.gmail
 });
 
-client.on('connect', function() {
+client.on('connect', () => {
 	console.log('connected');
-	client.openMailbox('INBOX', function(error){
+	client.openMailbox('INBOX', error => {
 		if (error) throw error;
 	});
 });
 
-client.on("new", function(msg) {
+client.on("new", msg => {
 	if (_.findWhere(msg.to, { address: settings.gmail.trigger_address })) {
 		utilities.query(msg.title);
 	}

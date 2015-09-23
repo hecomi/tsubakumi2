@@ -15,7 +15,7 @@ wordMap.push({
 	word: '(音声)?認識開始(して)?',
 	rule: {
 		recogStartRule: true,
-		func: function() {
+		func: () => {
 			get('/restart');
 			if (recognizing) {
 				return '既に開始してますよ！';
@@ -30,7 +30,7 @@ wordMap.push({
 wordMap.push({
 	word: ['(認識)?(一時)?停止(して)?', '(ちょっと)?だまって(て)?'],
 	rule: {
-		func: function() {
+		func: () => {
 			if (!recognizing) {
 				return '現在停止中です';
 			} else {
@@ -42,12 +42,12 @@ wordMap.push({
 });
 
 // マップから登録
-wordMap.forEach(function(speech) {
+wordMap.forEach(speech => {
 	if (!speech || !speech.word || !speech.rule) {
 		throw new Error('speech-map.js contains invalid data');
 	}
 	var words = (speech.word instanceof Array) ? speech.word : [speech.word];
-	words.forEach(function(word) {
+	words.forEach(word => {
 		rules[word] = speech.rule;
 	});
 });
@@ -77,31 +77,31 @@ app.use(require('./middlewares/errorHandler.js'));
 
 // Routings
 // --------------------------------------------------------------------------------
-app.get('/status', function(req, res) {
+app.get('/status', (req, res) => {
 	res.jsonp({
 		recognizing: recognizing
 	});
 });
 
-app.get('/controller', function(req, res) {
-	var words = _.chain(rules).keys().map(function(word) {
+app.get('/controller', (req, res) => {
+	var words = _.chain(rules).keys().map(word => {
 		return word.replace(/\?/g, '').replace(
-			/\(([^|)]+).*?\)/g, function() { return RegExp.$1; });
+			/\(([^|)]+).*?\)/g, () => { return RegExp.$1; });
 	});
 	res.render('controller', {words : words});
 });
 
-app.get('/apis', function(req, res) {
-	var words = _.chain(rules).keys().map(function(word) {
+app.get('/apis', (req, res) => {
+	var words = _.chain(rules).keys().map(word => {
 		return word.replace(/\?/g, '').replace(
-			/\(([^|)]+).*?\)/g, function() { return RegExp.$1; });
+			/\(([^|)]+).*?\)/g, () => RegExp.$1);
 	}).value();
 	res.jsonp({ apis: words });
 });
 
-app.get('/apis/pebble', function(req, res) {
+app.get('/apis/pebble', (req, res) => {
 	var apis = [];
-	_.each(rules, function(rule) {
+	_.each(rules, rule => {
 		console.log(rule);
 		if (rule.api && !(rule.api instanceof Array)) {
 			apis.push(rule.api);
@@ -110,9 +110,9 @@ app.get('/apis/pebble', function(req, res) {
 	res.jsonp({ apis: apis });
 });
 
-app.get('/:word', function(req, res) {
+app.get('/:word', (req, res) => {
 	var matched = false;
-	_.each(rules, function(rule, key) {
+	_.each(rules, (rule, key) => {
 		if ( matched || (!recognizing && !rule.recogStartRule) ) {
 			return;
 		}
@@ -163,6 +163,6 @@ console.log('CONTROLLER PORT:', app.get('controller').port);
 
 // Unexpected Errors
 // --------------------------------------------------------------------------------
-process.on('uncaughtException', function(err) {
+process.on('uncaughtException', err => {
 	console.error('UNCAUGHT EXCEPTION:', err);
 });
