@@ -13,7 +13,7 @@ module.exports = {
 	macroMap : require('./macro-map'),
 	command  : {
 		app : 'pm2',
-		option: '--node-args="--harmony"',
+		option: '--node-args="--harmony" --watch',
 		commands: _.extend(
 			_.chain(fs.readdirSync('./services'))
 			.filter(path => (path.indexOf('.js') != -1))
