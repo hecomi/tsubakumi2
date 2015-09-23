@@ -18,10 +18,8 @@ module.exports = {
 			_.chain(fs.readdirSync('./services'))
 			.filter(path => (path.indexOf('.js') != -1))
 			.map(path => path.replace('.js', ''))
-			.map(path => './services/' + path)
 			.value().concat([
 				'all',
-				'api'
 			])
 		)
 	},

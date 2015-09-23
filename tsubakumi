@@ -3,13 +3,12 @@
 var shell    = require('shell');
 var app      = new shell();
 var printf   = require('printf');
-var exec     = require('child_process').exec;
-var domain   = require('domain');
+var execSync = require('child_process').execSync;
 var settings = require('./settings').command;
 
 var run = (res, command, script) => {
 
-	if (settings.commands.indexOf(script) == -1) {
+	if (script && settings.commands.indexOf(script) == -1) {
 		res.red('command "' + script + '" is not exist.\n');
 		res.print('available commands are:\n');
 		settings.commands.forEach(script => {
@@ -27,21 +26,15 @@ var run = (res, command, script) => {
 		return;
 	}
 
-	var d = domain.create();
-	d.run(() => {
-		var cmd = printf('%s %s %s.js %s', settings.app, command, script, settings.option);
-		exec(cmd, (err, stdout, stderr) => {
-			if (err) throw err;
-			if (stdout) res.green(stdout.green);
-			if (stderr) res.red(stderr.red);
-			res.prompt();
-		});
-	});
-
-	d.on('error', err => {
-		res.red(err.stack);
-		res.prompt();
-	});
+	var cmd = '';
+	if (script) {
+		cmd = printf('%s %s ./services/%s.js %s', settings.app, command, script, settings.option);
+	} else {
+		cmd = printf('%s %s', settings.app, command, script, settings.option);
+	}
+	var log = execSync(cmd);
+	res.blue(log);
+	res.prompt();
 };
 
 app.configure(() => {
@@ -64,4 +57,12 @@ app.cmd('restart :script', 'Restart all servers', (req, res) => {
 
 app.cmd('stop :script', 'Stop all servers', (req, res) => {
 	run(res, 'stop', req.params.script);
+});
+
+app.cmd('ls', 'Show all services statuses', (req, res) => {
+	run(res, 'list');
+});
+
+app.cmd('kill', 'Kill all services', (req, res) => {
+	run(res, 'kill');
 });
