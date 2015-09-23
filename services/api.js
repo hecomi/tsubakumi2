@@ -1,6 +1,7 @@
 var express  = require('express');
 var app      = express();
 var settings = require('../settings');
+var utils    = require('../utils');
 
 // Settings
 // --------------------------------------------------------------------------------
@@ -17,11 +18,11 @@ app.use(express.favicon());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(app.router);
-app.use(require('./middlewares/errorHandler.js'));
+app.use(utils.errorHandler);
 
 // Routings
 // --------------------------------------------------------------------------------
-var routes = require('./routes')(app);
+var routes = require('./apis')(app);
 
 // Errors
 // --------------------------------------------------------------------------------

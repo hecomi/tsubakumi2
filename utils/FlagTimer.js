@@ -19,3 +19,4 @@ FlagTimer.prototype = {
 	}
 };
 
+module.exports = FlagTimer;
