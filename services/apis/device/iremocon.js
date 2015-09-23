@@ -1,5 +1,6 @@
 var iRemocon = require('iRemocon');
-var _ = require('underscore');
+var _        = require('underscore');
+var irMap    = require('../../../settings/ir-map');
 
 var InvalidArgumentsError = msg => {
 	var e = new Error(msg);
@@ -24,7 +25,7 @@ var routes = app => {
 		var ir = new iRemocon(app.get('iRemocon').ip);
 		switch (req.params.api) {
 			case 'list':
-				res.jsonp(app.get('iRemocon').irMap);
+				res.jsonp(irMap);
 				break;
 			case 'ip':
 				res.jsonp({ msg: ir.getIP() });
@@ -40,9 +41,9 @@ var routes = app => {
 					throw InvalidArgumentsError('argument is undefined');
 				}
 				var namedMap = {};
-				_.chain(app.get('iRemocon').irMap).invert().keys().each(keys => {
+				_.chain(irMap).invert().keys().each(keys => {
 					keys.split(',').forEach(key => {
-						namedMap[key.replace(/\s/g, '/')] = _.invert(app.get('iRemocon').irMap)[keys];
+						namedMap[key.replace(/\s/g, '/')] = _.invert(irMap)[keys];
 					});
 				});
 				var no = req.params.no || namedMap[req.params[0]];
@@ -50,7 +51,7 @@ var routes = app => {
 					if (err) throw iRemoconError(err);
 					res.jsonp({
 						ir   : req.params.no,
-						name : app.get('iRemocon').irMap[req.params.no],
+						name : irMap[req.params.no],
 						msg  : result
 					});
 				});
@@ -64,7 +65,7 @@ var routes = app => {
 					console.log(result);
 					res.jsonp({
 						ir   : req.params.no,
-						name : app.get('iRemocon').irMap[req.params.no],
+						name : irMap[req.params.no],
 						msg  : result
 					});
 				});
@@ -74,7 +75,7 @@ var routes = app => {
 					if (err) throw iRemoconError(err);
 					res.jsonp({
 						ir   : req.params.no,
-						name : app.get('iRemocon').irMap[req.params.no],
+						name : irMap[req.params.no],
 						msg  : result
 					});
 				});

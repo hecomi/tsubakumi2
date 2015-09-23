@@ -9,8 +9,6 @@ module.exports = {
 	port     : port,
 	host     : ip.address(),
 	address  : 'http://' + ip.address() + ':' + port + '/',
-	aliasMap : require('./alias-map'),
-	macroMap : require('./macro-map'),
 	command  : {
 		app : 'pm2',
 		option: '--node-args="--harmony" --watch',
@@ -33,7 +31,6 @@ module.exports = {
 	},
 	iRemocon: {
 		ip    : '192.168.0.4',
-		irMap : require('./ir-map'),
 		test  : {
 			checkIrNum : 999,  // テストする IR 番号
 			isCheckIc  : false // 赤外線の学習のテストをするか

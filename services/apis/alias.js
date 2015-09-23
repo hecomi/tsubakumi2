@@ -1,13 +1,14 @@
-var _    = require('underscore');
-var get  = require('../../utils').get;
-var util = require('util');
+var _        = require('underscore');
+var get      = require('../../utils').get;
+var util     = require('util');
+var aliasMap = require('../../settings/alias-map');
+var irMap    = require('../../settings/ir-map');
 
 module.exports = app => {
 
 	var aliasMapHandler = (req, res) => {
 		var url = req.params[0];
 		var endFlag = false;
-		var aliasMap = app.get('aliasMap');
 
 		_.keys(aliasMap).forEach(api => {
 			if ( url.match(new RegExp(api)) ) {
@@ -42,7 +43,7 @@ module.exports = app => {
 		var url = req.params[0];
 		var endFlag = false;
 
-		_.chain(app.get('iRemocon').irMap).invert().keys().each(keys => {
+		_.chain(irMap).invert().keys().each(keys => {
 			keys.split(',').forEach(key => {
 				var api = '/' + key.replace(/\s/g, '/');
 				if (url.match(api) && !endFlag) {

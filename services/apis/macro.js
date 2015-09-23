@@ -1,4 +1,5 @@
 var printf   = require('printf');
+var macroMap = require('../../settings/macro-map');
 
 var InvalidMacroError = msg => {
 	var e = new Error(msg);
@@ -8,7 +9,6 @@ var InvalidMacroError = msg => {
 
 var routes = app => {
 	return (req, res) => {
-		var macroMap = app.get('macroMap');
 		for (var url in macroMap) {
 			if (req.params[0] === url) {
 				macroMap[url](req, res);

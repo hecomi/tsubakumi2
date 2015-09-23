@@ -1,10 +1,9 @@
 var request = require('request');
 var printf  = require('printf');
+var settings = require('../settings');
 var timeout = 3000;
 
 module.exports = (options, callback) => {
-	var settings = require('../settings'); // circular dependency...
-
 	if (!(options instanceof Object)) {
 		options = { path: options };
 	}
