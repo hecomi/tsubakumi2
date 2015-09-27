@@ -6,7 +6,7 @@ var colors = require('colors');
 
 var timer    = new Timer();
 var state    = 0;
-var duration = 5;
+var duration = 180;
 var high     = '50,30,20';
 var low      = '6,5,3';
 
