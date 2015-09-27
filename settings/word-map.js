@@ -37,7 +37,7 @@ module.exports = [
 		}
 	},
 	{
-		word: 'おはようございます',
+		word: 'おはよう(ございます)?',
 		rule: {
 			reply: 'おはようございます',
 			api: '/light/on'
