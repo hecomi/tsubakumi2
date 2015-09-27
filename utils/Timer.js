@@ -17,6 +17,9 @@ Timer.prototype = {
 			clearTimeout(this.timer);
 			this.timer = null;
 		}
+	},
+	isRunning: () => {
+		return this.timer !== null;
 	}
 };
 

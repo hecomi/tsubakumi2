@@ -21,24 +21,26 @@ WeMoHandler.prototype = {
 	// TODO: express のルーティングと統合したい
 	_init: () => {
 		var self = this;
-		var callback = (err, result) => {
-			socket.broadcast(self.address, {
-				error  : err,
-				state  : result || self._currentState,
-				sender : __filename
-			});
+		var callback = api => {
+			return (err, result) => {
+				socket.broadcast(self.address + '/' + api, {
+					error  : err,
+					state  : parseInt(result) || self._currentState,
+					sender : __filename
+				});
+			};
 		};
 		socket.on(this.address + '/on', msg => {
 			if (msg && msg.sender === __filename) return;
-			self.on(callback(msg));
+			self.on(callback('on'));
 		});
 		socket.on(this.address + '/off', msg => {
 			if (msg && msg.sender === __filename) return;
-			self.off(callback(msg));
+			self.off(callback('off'));
 		});
 		socket.on(this.address + '/state', msg => {
 			if (msg && msg.sender === __filename) return;
-			self.state(callback(msg));
+			self.state(callback('state'));
 		});
 	},
 	search: callback => {
@@ -150,7 +152,7 @@ WeMoHandler.prototype = {
 			}
 			socket.broadcast(self.address + '/state', {
 				error  : err,
-				state  : result,
+				state  : parseInt(result),
 				sender : __filename
 			});
 		});
@@ -164,7 +166,7 @@ for (var key in switches) {
 
 // モーション
 for (var key in motions) {
-	var wemo = new WeMoHandler(key, motions[key].name, 'switch');
+	var wemo = new WeMoHandler(key, motions[key].name, 'motion');
 }
 
 process.on('uncaughtException', err => {

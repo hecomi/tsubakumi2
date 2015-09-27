@@ -1,56 +1,48 @@
 var utils  = require('../utils');
 var get    = utils.get;
+var socket = utils.websocket;
 var Timer  = utils.Timer;
 var colors = require('colors');
-var domain = require('domain');
-var d      = domain.create();
 
-var Hallway = {
-	lightState    : 1,
-	lightTimer    : new Timer(),
-	checkInterval : 1,
-	onDuration    : 30,
-	high          : '50,30,20',
-	low           : '6,5,3',
-	count         : 0,
-};
+var timer    = new Timer();
+var state    = 0;
+var duration = 30;
+var high     = '50,30,20';
+var low      = '6,5,3';
 
-d.run(() => {
-	setInterval(() => {
-		var onDetectMove = () => {
-			Hallway.lightTimer.stop();
-			get('/hallway/light/on', () => {
-				get('/hallway/light/rgb/' + Hallway.high);
-			});
-		};
-		var onLostMove = () => {
-			Hallway.lightTimer.start(() => {
-				get('/hallway/light/rgb/' + Hallway.low);
-				Hallway.lightTimer.start(() => {
-					get('/hallway/light/off');
-				}, Hallway.onDuration / 2 * 1000);
-			}, Hallway.onDuration / 2 * 1000);
-		};
-
-		get('/entrance/motion', json => {
-			if (json.error) throw json.error;
-
-			var newState = parseInt(json.results[0].result.state, 10);
-			if (newState !== Hallway.lightState ||
-				Hallway.count % (Hallway.onDuration / Hallway.checkInterval) === 0) {
-				Hallway.lightState = newState;
-				if (newState === 1) {
-					onDetectMove();
-				} else {
-					onLostMove();
-				}
-			}
-		});
-
-		++Hallway.count;
-	}, Hallway.checkInterval * 1000);
+socket.on('/entrance/motion', msg => {
+	if (state !== msg.state) {
+		state = msg.state;
+		if (msg.state === 0) {
+			onLostMove();
+		} else {
+			onDetectMove();
+		}
+	}
 });
 
-d.on('error', err => {
-	console.error('ERROR: %s'.red, err.code);
+var onDetectMove = () => {
+	timer.stop();
+	get('/hallway/light/on', () => {
+		get('/hallway/light/rgb/' + high);
+	});
+};
+
+var onLostMove = () => {
+	timer.start(() => {
+		get('/hallway/light/rgb/' + low);
+		timer.start(() => {
+			get('/hallway/light/off');
+		}, duration / 2 * 1000);
+	}, duration / 2 * 1000);
+};
+
+setInterval(() => {
+	if (state === 0 && timer.isRunning() === false) {
+		get('/hallway/light/off');
+	}
+}, duration * 1000);
+
+process.on('uncaughtException', err => {
+	console.error(err.stack.red);
 });
