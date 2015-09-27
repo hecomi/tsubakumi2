@@ -1,4 +1,5 @@
-var hue         = require("node-hue-api");
+var colors      = require('colors');
+var hue         = require('node-hue-api');
 var HueApi      = hue.HueApi;
 var lightState  = hue.lightState;
 var lightStates = [];
@@ -14,7 +15,9 @@ var routes = app => {
 		var api = new HueApi(app.get('hue').ip, app.get('hue').user);
 		var callHueApi = (apiName, arg1, arg2) => {
 			var callback = (err, result) => {
-				if (err) throw err;
+				if (err) {
+					console.error(err.red);
+				}
 				if (typeof(result) !== 'object') {
 					res.jsonp({ result: result });
 				} else {

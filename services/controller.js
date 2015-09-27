@@ -74,7 +74,7 @@ app.use(express.favicon());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(app.router);
-app.use(utils.errorHandler);
+app.use(utils.middlewares.errorHandler);
 
 // Routings
 // --------------------------------------------------------------------------------

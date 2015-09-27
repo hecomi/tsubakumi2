@@ -15,10 +15,11 @@ for (var key in settings) {
 app.use(require('express-domain-middleware'));
 app.use(express.logger());
 app.use(express.favicon());
+app.use(utils.middlewares.successHandler);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(app.router);
-app.use(utils.errorHandler);
+app.use(utils.middlewares.errorHandler);
 
 // Routings
 // --------------------------------------------------------------------------------

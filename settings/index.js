@@ -11,7 +11,8 @@ module.exports = {
 	address  : 'http://' + ip.address() + ':' + port + '/',
 	command  : {
 		app : 'pm2',
-		option: '--node-args="--harmony" --watch',
+		// option: '--node-args="--harmony" --watch',
+		option: '--node-args="--harmony"',
 		commands: _.extend(
 			_.chain(fs.readdirSync('./services'))
 			.filter(path => (path.indexOf('.js') != -1))
@@ -61,6 +62,9 @@ module.exports = {
 		ip   : '192.168.0.6',
 		user : secret.hue.user
 	},
+	blink1: {
+		serial : '20002ADD'
+	},
 	netatmo : secret.netatmo,
 	twitter : secret.twitter,
 	gmail   : secret.gmail,
@@ -69,16 +73,16 @@ module.exports = {
 		address  : 'http://' + ip.address() + ':' + (port + 1) + '/',
 	},
 	websocket: {
-		port: port + 2,
-		address  : 'http://' + ip.address() + ':' + (port + 2) + '/',
+		port    : port + 2,
+		address : 'http://' + ip.address() + ':' + (port + 2) + '/',
 	},
 	gui: {
-		port: port + 3,
-		address  : 'http://' + ip.address() + ':' + (port + 3) + '/',
+		port    : port + 3,
+		address : 'http://' + ip.address() + ':' + (port + 3) + '/',
 	},
 	twelite: {
-		port: '/dev/tty.usbserial-AHXU1CX2',
-		sensors: [
+		port    : '/dev/tty.usbserial-AHXU1CX2',
+		sensors : [
 			{
 				id    : 1,
 				type  : 'host',
