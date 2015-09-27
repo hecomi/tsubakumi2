@@ -112,6 +112,7 @@ app.get('/apis/pebble', (req, res) => {
 });
 
 app.get('/:word', (req, res) => {
+	console.log(req.params);
 	var matched = false;
 	_.each(rules, (rule, key) => {
 		if ( matched || (!recognizing && !rule.recogStartRule) ) {

@@ -1,10 +1,6 @@
-var WeMo   = require('wemo');
-
-var WeMoNotFoundError = (ip, port) => {
-	var e = new Error('WeMo@' + ip + ':' + port + ' is not found');
-	e.name = 'WeMoNotFoundError';
-	return e;
-};
+var printf   = require('printf');
+var socket   = require('../../../utils').websocket;
+var settings = require('../../../settings').WeMo;
 
 var InvalidArgumentsError = msg => {
 	var e = new Error(msg);
@@ -18,138 +14,78 @@ var InvalidApiError = msg => {
 	return e;
 };
 
-var WeMoHandler = target => {
-	this.target = target;
-	this.name   = target.name;
-	this.wemo   = null;
-	this.isSearching = false;
+// ---
+
+var WeMoListener = (type, key) => {
+	this._currentState = 0;
+	this.address = printf('/device/wemo/%s/%s', type, key);
+	this._init();
 };
 
-WeMoHandler.prototype = {
-	search: callback => {
-		if (!this.isSearching && this.wemo !== null) {
-			callback();
-			return;
-		}
-		if (!this.isSearching && this.wemo === null) {
-			this.isSearching = true;
-			var self = this;
-			WeMo.Search(this.name, (err, device) => {
-				self.isSearching = false;
-				if (err) return;
-				self.ip   = device.ip;
-				self.port = device.port;
-				self.wemo = new WeMo(self.ip, self.port);
-			});
-		}
-		if (typeof(callback) === 'function') {
-			callback(new Error(this.name + ' has not been found yet'));
-		}
+WeMoListener.prototype = {
+	_init: () => {
+		var self = this;
+		socket.on(this.address + '/state', msg => {
+			if (msg.error) {
+				console.error(msg.error);
+				return;
+			}
+			self._currentState = msg.state;
+		});
 	},
 	state: callback => {
-		var self = this;
-		this.search(err => {
-			if (err) {
-				callback(err);
-				return;
-			}
-			self.wemo.getBinaryState((err, result) => {
-				if (err) { self.wemo = null; }
-				callback(err, result);
-			});
-		});
+		callback(null, this._currentState);
+	},
+	request: (method, callback) => {
+		socket.broadcast(this.address + '/' + method);
+		callback(null, this._currentState);
 	},
 	on: callback => {
-		var self = this;
-		this.search(err => {
-			if (err) {
-				callback(err);
-				return;
-			}
-			self.wemo.setBinaryState(1, (err, result) => {
-				if (err) { self.wemo = null; }
-				callback(err, result);
-			});
-		});
+		this.request('on', callback);
 	},
 	off: callback => {
-		var self = this;
-		this.search(err => {
-			if (err) {
-				callback(err);
-				return;
-			}
-			self.wemo.setBinaryState(0, (err, result) => {
-				if (err) { self.wemo = null; }
-				callback(err, result);
-			});
-		});
-	}
+		this.request('off', callback);
+	},
 };
 
-var routes = app => {
-	return {
-		switches: (req, res) => {
-			var target = req.params.target;
-			if (!(target in app.get('WeMo').switches)) {
-				throw new InvalidArgumentsError(target + ' is not registered as WeMo Switch device');
-			}
+var switches = {};
+var motions  = {};
 
-			var target = app.get('WeMo').switches[target];
-			target.handler = target.handler || new WeMoHandler(target);
-			var wemo = target.handler;
+// スイッチ
+for (var key in settings.switches) {
+	switches[key] = new WeMoListener('switch', key);
+}
 
-			switch (req.params.api) {
-				case 'state':
-					wemo.state((err,result) => {
-						if (err) throw err;
-						res.jsonp({ state: result });
-					});
-					break;
-				case 'on':
-					wemo.on((err,result) => {
-						if (err) throw err;
-						res.jsonp({ state: result });
-					});
-					break;
-				case 'off':
-					wemo.off((err,result) => {
-						if (err) throw err;
-						res.jsonp({ state: result });
-					});
-					break;
-				default:
-					throw InvalidApiError('"' + req.params.api + '" is not WeMo API');
-			}
-		},
+// モーション
+for (var key in settings.motions) {
+	motions[key] = new WeMoListener('switch', key);
+}
 
-		motions: (req, res) => {
-			var target = req.params.target;
+// ---
 
-			if (!(target in app.get('WeMo').motions)) {
-				throw new InvalidArgumentsError(target + ' is not registered as WeMo Switch device');
-			}
-
-			var target = app.get('WeMo').motions[target];
-			target.handler = target.handler || new WeMoHandler(target);
-			var wemo = target.handler;
-
-			switch (req.params.api) {
-				case 'state':
-					wemo.state((err, result) => {
-						if (err) throw err;
-						res.jsonp({ state: result });
-					});
-					break;
-				default:
-					throw InvalidApiError('"' + req.params.api + '" is not WeMo API');
-			}
+var routes = (app, devices) => {
+	return (req, res) => {
+		var target = req.params.target;
+		if (!(target in devices)) {
+			throw new InvalidArgumentsError(target + ' is not registered as WeMo Switch device');
 		}
+
+		var api  = req.params.api;
+		var wemo = devices[target];
+
+		if (!(api in wemo)) {
+			throw InvalidApiError('"' + req.params.api + '" is not WeMo API');
+		}
+
+		wemo[api]((err, state) => {
+			if (err) throw err;
+			res.jsonp({ state: state });
+		});
 	};
 };
 
 module.exports = app => {
 	var api = routes(app);
-	app.get('/device/wemo/switch/:target/:api', api.switches);
-	app.get('/device/wemo/motion/:target/:api', api.motions);
+	app.get('/device/wemo/switch/:target/:api', routes(app, switches));
+	app.get('/device/wemo/motion/:target/:api', routes(app, motions));
 };

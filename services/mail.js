@@ -17,6 +17,7 @@ client.on('connect', () => {
 
 client.on("new", msg => {
 	if (_.findWhere(msg.to, { address: settings.gmail.trigger_address })) {
+		console.log('[Mail Trigger]', msg.title);
 		utils.query(msg.title);
 	}
 });

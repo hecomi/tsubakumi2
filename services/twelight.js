@@ -42,7 +42,7 @@ sp.on('data', data => {
 	var sensorData = json.sensorData;
 
 	socket.emit('broadcast', {
-		address : 'twelight',
+		address : '/device/twelite/set/' + sensorData.deviceId,
 		data    : sensorData
 	});
 

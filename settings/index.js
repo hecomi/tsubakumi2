@@ -37,7 +37,8 @@ module.exports = {
 		}
 	},
 	WeMo: {
-		// モニタのスイッチ
+		autoRetryMaxNum: 5,
+		updateInterval: 250,
 		switches : {
 			monitor1: {
 				name: 'WeMo Switch 1'
@@ -46,7 +47,6 @@ module.exports = {
 				name: 'WeMo Switch 2'
 			}
 		},
-		// 玄関
 		motions : {
 			entrance: {
 				name: 'WeMo Motion 1'
@@ -73,7 +73,8 @@ module.exports = {
 		address  : 'http://' + ip.address() + ':' + (port + 2) + '/',
 	},
 	gui: {
-		port: port + 3
+		port: port + 3,
+		address  : 'http://' + ip.address() + ':' + (port + 3) + '/',
 	},
 	twelite: {
 		port: '/dev/tty.usbserial-AHXU1CX2',

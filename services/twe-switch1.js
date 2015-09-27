@@ -1,10 +1,8 @@
-var settings = require('../settings').websocket;
-var get      = require('../utils').get;
-var socket   = require('socket.io-client')(settings.address);
+var utils  = require('../utils');
+var socket = utils.websocket;
+var get    = utils.get;
 
-socket.on('twelight', data => {
-	if (data.deviceId !== 3) return;
-
+socket.on('/device/twelite/set/3', data => {
 	var buttons = [
 		(data.digitalInput & 0x8) > 0,
 		(data.digitalInput & 0x4) > 0,

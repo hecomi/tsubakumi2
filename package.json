@@ -29,6 +29,7 @@
     "socketio-wildcard": "*",
     "twitter": "*",
     "underscore": "*",
+    "uuid": "^2.0.1",
     "wemo": "*"
   },
   "repository": {
